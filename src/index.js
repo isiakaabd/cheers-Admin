@@ -1,19 +1,37 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { Provider } from 'react-redux';
-import { store } from './app/store';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import './index.css';
-
-const container = document.getElementById('root');
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import { store } from "./app/store";
+import "./App.css";
+import reportWebVitals from "./reportWebVitals";
+import { ToastContainer } from "react-toastify";
+import CssBaseline from "@mui/material/CssBaseline";
+import AppRoutes from "routes/AppRoutes";
+import { ThemeProvider } from "@emotion/react";
+import { muiTheme } from "muiTheme";
+const container = document.getElementById("root");
 const root = createRoot(container);
 
 root.render(
   <React.StrictMode>
+    {/* <ThemeProvider theme={muiTheme}> */}
     <Provider store={store}>
-      <App />
+      <CssBaseline />
+      <AppRoutes />
+      <ToastContainer
+        style={{ fontSize: "1.8rem" }}
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </Provider>
+    {/* </ThemeProvider> */}
   </React.StrictMode>
 );
 
