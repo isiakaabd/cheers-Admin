@@ -62,3 +62,6 @@ export const getTimeMoment = (startDate) => {
   //  durationObj.seconds().toFixed(0) + "s";
   // return formattedDuration;
 };
+export const getDate = (date) => {
+  return moment(date).format("DD-MM-YYYY");
+};

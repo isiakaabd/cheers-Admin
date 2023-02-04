@@ -3,28 +3,30 @@ import React from "react";
 import {
   useGetAllCategoriesQuery,
   useGetAllVendorsQuery,
+  useGetMainVendorsQuery,
 } from "redux/api/admin";
 import { Link } from "react-router-dom";
 const Dashboard = () => {
   const { data: category, isLoading: loading } = useGetAllCategoriesQuery();
+  const { data: vendors, isLoading } = useGetMainVendorsQuery();
   const { data: vendor, isLoading: load } = useGetAllVendorsQuery();
 
-  if (loading || load) return <Skeleton />;
+  if (loading || load || isLoading) return <Skeleton />;
   const arr = [
     {
-      name: "Total Vendor",
+      name: "Global Vendor",
       value: vendor?.total || 0,
+      link: "/global-vendors",
+    },
+    {
+      name: "Total Categories",
+      value: category?.length || 0,
+      link: "/categories",
+    },
+    {
+      name: "Vendors",
+      value: vendors?.length || 0,
       link: "/vendors",
-    },
-    {
-      name: "Total Categories",
-      value: category?.length || 0,
-      link: "/categories",
-    },
-    {
-      name: "Total Categories",
-      value: category?.length || 0,
-      link: "/categories",
     },
   ];
 

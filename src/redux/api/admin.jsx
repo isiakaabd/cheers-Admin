@@ -42,7 +42,23 @@ export const adminSlice = api.injectEndpoints({
         method: "GET",
       }),
       transformResponse: (response) => response.data,
-      //   invalidatesTags: ["categories"],
+      providesTags: ["categories"],
+    }),
+    getMainVendors: builder.query({
+      query: () => ({
+        url: `/get-vendors`,
+        method: "GET",
+      }),
+      transformResponse: (response) => response.data,
+      providesTags: ["vendor"],
+    }),
+    toggleVendor: builder.mutation({
+      query: (body) => ({
+        url: `/vendors/toggle`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["vendor"],
     }),
     updateCategory: builder.mutation({
       query: ({ categoryId, x }) => ({
@@ -87,6 +103,8 @@ export const {
   useActivateOrDeactivateVendorMutation,
   useGetCategoryQuery,
   useDeleteCategoryMutation,
+  useGetMainVendorsQuery,
   useCreateCategoryMutation,
+  useToggleVendorMutation,
   useUpdateCategoryMutation,
 } = adminSlice;

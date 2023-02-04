@@ -1,10 +1,12 @@
 export const patterns = {
   // PATIENTS PATTERNS
   Dashboard: "dashbaord",
-  Vendor: "vendor",
+  Vendors: "vendors",
+  "Global Vendors": "global-vendors",
   Categories: "categories",
-  Account: "account/profile",
   Settings: "account/settings",
+  Category: "categories/{id}",
+  Profile: "account",
 };
 
 const isRootPath = (path) =>

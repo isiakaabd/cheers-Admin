@@ -16,13 +16,12 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+
 import {
   AccountBox,
   ArrowBackIosNewOutlined,
   DashboardCustomizeOutlined,
-  Details,
+  CommuteOutlined,
   ExpandLess,
   ExpandMore,
   KeyboardArrowDownOutlined,
@@ -35,7 +34,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { patterns, predicateBreadcrumbFromUrl } from "./breadcrumb";
 import Footer from "./Footer";
 
-const drawerWidth = 240;
+const drawerWidth = 260;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -132,21 +131,24 @@ const Crumb = ({ breadcrumbs }) => {
   const handleClickAway = () => {
     setIsOpen(false);
   };
-
+  const navigate = useNavigate();
   return (
     <Grid container alignItems="center" sx={{ position: "relative" }}>
       <Grid item>
         <Grid
           container
           alignItems="center"
-          //   onClick={() => history.go(previousIndex)}
+          onClick={() => navigate(previousIndex)}
+          //  onClick={() => history.go(previousIndex)}
           sx={{ cursor: "pointer" }}
         >
           <ArrowBackIosNewOutlined
-            fontSize="small"
+            fontSize="medium"
             sx={{ marginRight: "0.5rem", color: "#3E5EA9" }}
           />{" "}
-          <Typography variant="p">Back to {previousText} </Typography>
+          <Typography variant="p" sx={{ color: "#3E5EA9" }}>
+            Back to {previousText}
+          </Typography>
         </Grid>
       </Grid>
       {breadcrumbs.length > 2 ? (
@@ -184,7 +186,8 @@ const Crumb = ({ breadcrumbs }) => {
                 <button
                   key={index}
                   style={{ borderRadius: borderRadius }}
-                  //   onClick={() => history.go(crumb.pageIndex)}
+                  onClick={() => navigate(crumb.pageIndex)}
+                  //   onClick={() => history.go()}
                 >
                   {crumb.pageTitle}
                 </button>
@@ -265,15 +268,21 @@ export default function MiniDrawer() {
 
     {
       id: 1,
+      name: "Global Vendors",
+      link: "/global-vendors",
+      icon: PersonAddAlt1Outlined,
+    },
+    {
+      id: 2,
       name: "Vendors",
       link: "/vendors",
       icon: PersonAddAlt1Outlined,
     },
     {
-      id: 2,
+      id: 3,
       name: "Categories",
       link: "/categories",
-      icon: PersonAddAlt1Outlined,
+      icon: CommuteOutlined,
     },
   ];
   const [opens, setOpens] = useState(true);
@@ -377,11 +386,11 @@ export default function MiniDrawer() {
           <Collapse in={opens} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               <ListItemButton
-                selected={id === 3}
+                selected={id === 4}
                 sx={{ pl: 4 }}
                 onClick={() => {
-                  setId(3);
-                  navigate("/account/profile");
+                  setId(4);
+                  navigate("/account");
                 }}
               >
                 <ListItemIcon>
@@ -390,11 +399,11 @@ export default function MiniDrawer() {
                 <ListItemText primary="Account" />
               </ListItemButton>
               <ListItemButton
-                selected={id === 4}
+                selected={id === 5}
                 sx={{ pl: 4 }}
                 onClick={() => {
-                  setId(4);
-                  navigate("/account/settings");
+                  setId(5);
+                  navigate("/settings");
                 }}
               >
                 <ListItemIcon>

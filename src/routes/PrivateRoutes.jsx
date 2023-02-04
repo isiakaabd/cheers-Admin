@@ -1,25 +1,12 @@
-import { lazy, FC, Suspense, ReactNode } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-// import { MasterLayout } from "../../_metronic/layout/MasterLayout";
-// import TopBarProgress from "react-topbar-progress-indicator";
-// import { DashboardWrapper } from "../pages/dashboard/DashboardWrapper";
 import Inventories from "pages/inventory";
-import CreateInventory from "pages/inventory/create";
-import ShowInventories from "pages/inventory/show";
-import EditInventory from "pages/inventory/edit";
-import { MasterLayout } from "pages/MasterLayout";
 import MiniDrawer from "pages/Drawer";
 import Vendor from "pages/vendors";
+import Vendors from "pages/vendor";
 import Categories from "pages/categories";
 import Dashboard from "pages/Dashboard";
-// import MasterLayout from "pages/MasterLayout";
-// import { MenuTestPage } from "../pages/MenuTestPage";
-// import { getCSSVariableValue } from "../../_metronic/assets/ts/_utils";
-// import Inventories from "../modules/errors/components/inventory";
-// import CreateInventories from "../modules/errors/components/inventory/create";
-// import EditInventories from "../modules/errors/components/inventory/edit";
-// import ShowInventories from "../modules/errors/components/inventory/show";
-// import Categories from "../modules/errors/components/inventory/categories";
+import SingleCategory from "pages/categories/SingleCategory";
+import Profile from "pages/profile";
 
 const PrivateRoutes = () => {
   //   const BuilderPageWrapper = lazy(() =>
@@ -41,13 +28,14 @@ const PrivateRoutes = () => {
   return (
     <Routes>
       <Route element={<MiniDrawer />}>
-        {/* Redirect to Dashboard after success login/registartion */}
         <Route path="auth/*" element={<Navigate to="/dashboard" />} />
-        {/* Pages */}
-        {/* <Route path="dashboard" element={<DashboardWrapper />} /> */}
+
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="vendors" element={<Vendor />} />
+        <Route path="global-vendors" element={<Vendor />} />
+        <Route path="vendors" element={<Vendors />} />
         <Route path="categories" element={<Categories />} />
+        <Route path="categories/:id" element={<SingleCategory />} />
+        <Route path="account" element={<Profile />} />
 
         <Route index element={<Inventories />} />
         {/* <Route path="*" element={<Navigate to="/error/404" />} /> */}
