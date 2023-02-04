@@ -1,15 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Checkbox, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik/dist";
 import FormikControl from "validation/FormikControl";
-import { CheckBox } from "@mui/icons-material";
 import CustomButton from "./CustomButton";
 import * as Yup from "yup";
 import { useRegisterMutation } from "redux/api/authSlice";
 import { toast } from "react-toastify";
-const Registration = (props) => {
+const Registration = () => {
   const validationSchema = Yup.object().shape({
     firstname: Yup.string()
       .min(3, "Minimum 3 symbols")
@@ -88,7 +85,6 @@ const Registration = (props) => {
         }}
       >
         {({ errors }) => {
-          console.log(errors);
           return (
             <Form noValidate>
               <Grid
@@ -218,7 +214,5 @@ const Registration = (props) => {
     </Grid>
   );
 };
-
-Registration.propTypes = {};
 
 export default Registration;

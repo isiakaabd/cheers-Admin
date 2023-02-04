@@ -29,8 +29,8 @@ const Vendor = () => {
   const { data: vendors, isLoading: loading } = useGetAllVendorsQuery();
 
   const [open, setOpen] = useState(false);
-
-  if (loading) return <Skeleton />;
+  const loadings = true;
+  if (loading) return <Skeletons />;
   const headcells = ["Name", "Link", "Created At", "Delete"];
   return (
     <>
@@ -150,6 +150,23 @@ function Rows({ row }) {
         </BasicMenu>
       </TableCell>
     </TableRow>
+  );
+}
+
+function Skeletons() {
+  return (
+    <Grid item container gap={4}>
+      <Skeleton
+        sx={{ height: "5rem", marginLeft: "auto", width: "15rem" }}
+        animation="wave"
+        variant="rectangular"
+      />
+      <Skeleton
+        sx={{ height: "50vh", width: "100%" }}
+        animation="wave"
+        variant="rectangular"
+      />
+    </Grid>
   );
 }
 

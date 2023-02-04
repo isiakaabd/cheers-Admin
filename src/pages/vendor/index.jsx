@@ -12,6 +12,7 @@ import {
   ListItemIcon,
   ListItemText,
   MenuItem,
+  Skeleton,
   TableCell,
   TableRow,
   Typography,
@@ -28,9 +29,10 @@ import {
 import { getDate } from "utilis";
 
 const Vendors = () => {
-  const { data: vendors } = useGetMainVendorsQuery();
+  const { data: vendors, isLoading } = useGetMainVendorsQuery();
 
   const headcells = ["Name", "Phone", "Vendor Name", "Date Joined", "Status"];
+  if (isLoading) return <Skeletons />;
   return (
     <Grid item container flexDirection="column">
       <Card sx={{ width: "100%" }}>
@@ -152,4 +154,15 @@ function Rows({ row }) {
   );
 }
 
+function Skeletons() {
+  return (
+    <Grid item container gap={4}>
+      <Skeleton
+        sx={{ height: "50vh", width: "100%" }}
+        animation="wave"
+        variant="rectangular"
+      />
+    </Grid>
+  );
+}
 export default Vendors;

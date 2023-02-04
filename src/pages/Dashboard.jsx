@@ -11,7 +11,7 @@ const Dashboard = () => {
   const { data: vendors, isLoading } = useGetMainVendorsQuery();
   const { data: vendor, isLoading: load } = useGetAllVendorsQuery();
 
-  if (loading || load || isLoading) return <Skeleton />;
+  if (loading || load || isLoading) return <Skeletons />;
   const arr = [
     {
       name: "Global Vendor",
@@ -64,3 +64,20 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+function Skeletons() {
+  return (
+    <Grid item container gap={3} flexWrap="nowrap">
+      {Array(3)
+        .fill(undefined)
+        .map((item, index) => (
+          <Skeleton
+            key={index}
+            sx={{ height: "15rem", width: "100%" }}
+            animation="wave"
+            variant="rectangular"
+          />
+        ))}
+    </Grid>
+  );
+}

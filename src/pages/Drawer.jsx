@@ -28,11 +28,25 @@ import {
   PersonAddAlt1Outlined,
   PersonAddAlt1Sharp,
   Settings,
+  SettingsOutlined,
+  ChevronRightOutlined,
+  ChevronLeftOutlined,
+  LogoutOutlined,
 } from "@mui/icons-material";
-import { ClickAwayListener, Collapse, Grid, Paper } from "@mui/material";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import {
+  Avatar,
+  ClickAwayListener,
+  Collapse,
+  Grid,
+  Paper,
+} from "@mui/material";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { patterns, predicateBreadcrumbFromUrl } from "./breadcrumb";
 import Footer from "./Footer";
+import images from "assets/images";
+import { useDispatch } from "react-redux";
+import { logOut } from "redux/auth/auth.reducers";
+import { toast } from "react-toastify";
 
 const drawerWidth = 260;
 
@@ -71,6 +85,7 @@ const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
+  background: "#000",
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -91,6 +106,7 @@ const Drawer = styled(MuiDrawer, {
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: "nowrap",
+  backgroundColor: "red",
   boxSizing: "border-box",
   ...(open && {
     ...openedMixin(theme),
@@ -284,11 +300,18 @@ export default function MiniDrawer() {
       link: "/categories",
       icon: CommuteOutlined,
     },
+    {
+      id: 3,
+      name: "Accounts",
+      link: "/account",
+      icon: SettingsOutlined,
+    },
   ];
-  const [opens, setOpens] = useState(true);
-
-  const handleClicks = () => {
-    setOpens(!opens);
+  const dispatch = useDispatch();
+  const handleClicks = async () => {
+    setTimeout(() => dispatch(logOut()), 3000);
+    toast.success("Logout Successful");
+    setTimeout(() => navigate("/auth/login"), 2000);
   };
   const navigate = useNavigate();
   const [id, setId] = useState(0);
@@ -309,35 +332,79 @@ export default function MiniDrawer() {
             edge="start"
             sx={{
               marginRight: 5,
+              color: "#1a1a27",
+              "&:hover": {
+                color: "#1a1a27",
+              },
               ...(open && { display: "none" }),
             }}
           >
-            <MenuIcon />
+            <MenuIcon sx={{ fontSize: "3rem" }} />
           </IconButton>
 
           <HeaderText />
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
+      <Drawer
+        variant="permanent"
+        open={open}
+        sx={{
+          "&.MuiDrawer-root": {
+            "& .MuiPaper-root": {
+              background: "#1a1a27",
+              color: "#9899ac",
+            },
+          },
+        }}
+      >
+        <DrawerHeader sx={{ py: 2 }}>
+          <Link to="/" style={{ marginRight: "auto" }}>
+            <Avatar
+              src={images.logo}
+              variant="rounded"
+              sx={{ display: { md: "block", xs: "none" } }}
+            />
+          </Link>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
+              <ChevronRightIcon sx={{ color: "#d20c83", fontSize: "3rem" }} /> //#a1a5b7
             ) : (
-              <ChevronLeftIcon />
+              <ChevronLeftOutlined
+                sx={{ color: "#d20c83", fontSize: "3rem" }}
+              />
             )}
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
+        <List sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
           {sidebarItem.map((text, index) => (
-            <ListItem key={text.id} disablePadding sx={{ display: "block" }}>
+            <ListItem
+              key={text.id}
+              disablePadding
+              sx={{
+                display: "block",
+                color: "#9899ac",
+                "&:hover >*, &:hover &.MuiListItemIcon-root": {
+                  color: "#fff !important",
+                  transition: "color 1ms ease-in",
+                },
+              }}
+            >
               <ListItemButton
                 selected={id === index}
                 sx={{
+                  "& .MuiListItemButton": {
+                    color: "inherit",
+                    "&:hover": {
+                      color: "#fff",
+                    },
+                  },
                   minHeight: 48,
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
+                  "&.Mui-selected": {
+                    color: "#fff",
+                  },
                 }}
                 onClick={() => {
                   setId(index);
@@ -347,72 +414,64 @@ export default function MiniDrawer() {
                 <ListItemIcon
                   sx={{
                     minWidth: 0,
+                    color: "inherit",
+                    "&:hover": {
+                      color: "#fff",
+                    },
                     mr: open ? 3 : "auto",
                     justifyContent: "center",
                   }}
                 >
-                  <text.icon />
+                  <text.icon sx={{ fontSize: "2.5rem", color: "inherit" }} />
                 </ListItemIcon>
                 <ListItemText
                   primary={text.name}
-                  sx={{ opacity: open ? 1 : 0 }}
+                  sx={{
+                    opacity: open ? 1 : 0,
+                  }}
+                  primaryTypographyProps={{
+                    fontSize: "1.5rem",
+                    fontWeight: 600,
+                  }}
                 />
               </ListItemButton>
             </ListItem>
           ))}
-          <ListItem disablePadding sx={{ display: "block" }}>
+          <ListItem
+            disablePadding
+            sx={{
+              display: "block",
+              mt: "auto",
+              pb: 2,
+            }}
+          >
             <ListItemButton
               sx={{
+                backgroundColor: "rgba(63, 66, 84, 0.35)",
+                color: "#f00",
+                "&:hover": {
+                  backgroundColor: "rgba(63, 66, 84, 0.35)",
+                  color: "#f00",
+                },
                 minHeight: 48,
+                mx: 2.5,
                 justifyContent: open ? "initial" : "center",
-                px: 2.5,
               }}
               onClick={handleClicks}
             >
               <ListItemIcon
                 sx={{
                   minWidth: 0,
+                  fontSize: "2rem",
                   mr: open ? 3 : "auto",
                   justifyContent: "center",
                 }}
               >
-                <AccountBox />
+                <LogoutOutlined sx={{ fontSize: "3rem", color: "#f00" }} />
               </ListItemIcon>
-              <ListItemText primary="Account" sx={{ opacity: open ? 1 : 0 }} />
-              {opens ? <ExpandLess /> : <ExpandMore />}
+              <ListItemText primary="Logout" sx={{ opacity: open ? 1 : 0 }} />
             </ListItemButton>
           </ListItem>
-
-          <Collapse in={opens} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItemButton
-                selected={id === 4}
-                sx={{ pl: 4 }}
-                onClick={() => {
-                  setId(4);
-                  navigate("/account");
-                }}
-              >
-                <ListItemIcon>
-                  <PersonAddAlt1Sharp />
-                </ListItemIcon>
-                <ListItemText primary="Account" />
-              </ListItemButton>
-              <ListItemButton
-                selected={id === 5}
-                sx={{ pl: 4 }}
-                onClick={() => {
-                  setId(5);
-                  navigate("/settings");
-                }}
-              >
-                <ListItemIcon>
-                  <Settings />
-                </ListItemIcon>
-                <ListItemText primary="Settings" />
-              </ListItemButton>
-            </List>
-          </Collapse>
         </List>
       </Drawer>
       <Box

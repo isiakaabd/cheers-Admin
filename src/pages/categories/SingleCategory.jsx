@@ -15,21 +15,17 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material";
-import CustomButton from "components/CustomButton";
 import Dialogs from "components/Dialog";
 import BasicMenu from "components/MenuComponent";
-import { Form, Formik } from "formik/dist";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   useDeleteCategoryMutation,
   useGetCategoryQuery,
-  useUpdateCategoryMutation,
 } from "redux/api/admin";
 import { getDate } from "utilis";
-import FormikControl from "validation/FormikControl";
-import * as Yup from "yup";
+
 import Create from "./component";
 
 const SingleCategory = () => {
