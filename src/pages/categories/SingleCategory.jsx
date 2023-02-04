@@ -1,10 +1,4 @@
-import {
-  DeleteForeverOutlined,
-  DeleteOutline,
-  Edit,
-  MoreHorizOutlined,
-  MoreVertOutlined,
-} from "@mui/icons-material";
+import { DeleteOutline, Edit, MoreVertOutlined } from "@mui/icons-material";
 import {
   Card,
   Grid,

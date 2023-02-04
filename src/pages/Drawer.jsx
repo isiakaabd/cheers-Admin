@@ -1,45 +1,35 @@
 import { useState, useMemo } from "react";
 import { styled, useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import MuiDrawer from "@mui/material/Drawer";
-import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 
 import {
-  AccountBox,
+  Divider,
+  Box,
+  MuiDrawer,
+  MuiAppBar,
+  List,
+  Toolbar,
+  CssBaseline,
+  Typography,
+  IconButton,
+  ListItemText,
+  ListItemButton,
+  ListItemIcon,
+  ListItem,
+} from "@mui/material";
+
+import {
+  MenuIcon,
+  ChevronRightIcon,
   ArrowBackIosNewOutlined,
   DashboardCustomizeOutlined,
   CommuteOutlined,
-  ExpandLess,
-  ExpandMore,
   KeyboardArrowDownOutlined,
   PersonAddAlt1Outlined,
-  PersonAddAlt1Sharp,
-  Settings,
   SettingsOutlined,
-  ChevronRightOutlined,
   ChevronLeftOutlined,
   LogoutOutlined,
 } from "@mui/icons-material";
-import {
-  Avatar,
-  ClickAwayListener,
-  Collapse,
-  Grid,
-  Paper,
-} from "@mui/material";
+import { Avatar, ClickAwayListener, Grid, Paper } from "@mui/material";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { patterns, predicateBreadcrumbFromUrl } from "./breadcrumb";
 import Footer from "./Footer";

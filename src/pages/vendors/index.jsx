@@ -16,7 +16,6 @@ import EmptyCell from "components/EmptyTable";
 import BasicTable from "components/Table";
 import { useState } from "react";
 import {
-  useCreateVendorMutation,
   useDeleteAvendorMutation,
   useGetAllVendorsQuery,
 } from "redux/api/admin";
@@ -29,7 +28,6 @@ const Vendor = () => {
   const { data: vendors, isLoading: loading } = useGetAllVendorsQuery();
 
   const [open, setOpen] = useState(false);
-  const loadings = true;
   if (loading) return <Skeletons />;
   const headcells = ["Name", "Link", "Created At", "Delete"];
   return (
