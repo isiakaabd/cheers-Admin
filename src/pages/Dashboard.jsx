@@ -31,9 +31,9 @@ const Dashboard = () => {
   ];
 
   return (
-    <Grid item container justifyContent="space-between" sx={{ py: 3 }}>
+    <Grid item container justifyContent="space-between" gap={3} sx={{ py: 3 }}>
       {arr?.map((item, index) => (
-        <Grid item md={3.5} xs={6} key={index} sx={{ boxShadow: 0 }}>
+        <Grid item md={3.5} sm={6} xs={12} key={index} sx={{ boxShadow: 0 }}>
           <Card
             component={Link}
             variant="outlined"

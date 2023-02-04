@@ -440,14 +440,11 @@ export default function MiniDrawer() {
           >
             <ListItemButton
               sx={{
-                backgroundColor: "rgba(63, 66, 84, 0.35)",
                 color: "#f00",
                 "&:hover": {
-                  backgroundColor: "rgba(63, 66, 84, 0.35)",
                   color: "#f00",
                 },
                 minHeight: 48,
-                mx: 2.5,
                 justifyContent: open ? "initial" : "center",
               }}
               onClick={handleClicks}

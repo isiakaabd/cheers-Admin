@@ -8,7 +8,7 @@ import Create from "./component";
 import EmptyCell from "components/EmptyTable";
 
 const Categories = () => {
-  const { data: categories, isLoading, error } = useGetAllCategoriesQuery();
+  const { data: categories, isLoading } = useGetAllCategoriesQuery();
   const [open, setOpen] = useState(false);
 
   if (isLoading) return <Skeletons />;
@@ -29,7 +29,14 @@ const Categories = () => {
             categories?.map((item) => {
               const { id, title, description } = item;
               return (
-                <Grid item md={3.5} xs={6} key={id} sx={{ boxShadow: 0 }}>
+                <Grid
+                  item
+                  md={3.5}
+                  sm={6}
+                  xs={12}
+                  key={id}
+                  sx={{ boxShadow: 0 }}
+                >
                   <Card
                     component={Link}
                     variant="outlined"
