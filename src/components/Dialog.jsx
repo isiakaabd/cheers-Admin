@@ -50,7 +50,7 @@ export default function Dialogs({
           />
         </Grid>
       </DialogActions>
-      <DialogContent sx={{ pt: 0 }}>{children}</DialogContent>
+      <DialogContent sx={{ pt: 0, height: "100%" }}>{children}</DialogContent>
     </Dialog>
   );
 }

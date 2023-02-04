@@ -54,7 +54,7 @@ const Create = ({ heading, title, id, setOpen, description, type }) => {
     if (error) toast.error(error);
   };
   return (
-    <Grid item container gap={2} sx={{ pt: 0 }}>
+    <Grid item container gap={2} sx={{ pt: 0, height: "100%" }}>
       <Typography
         color="text.primary"
         fontWeight={700}
