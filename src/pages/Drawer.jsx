@@ -4,8 +4,6 @@ import { styled, useTheme } from "@mui/material/styles";
 import {
   Divider,
   Box,
-  MuiDrawer,
-  MuiAppBar,
   List,
   Toolbar,
   CssBaseline,
@@ -14,12 +12,15 @@ import {
   ListItemText,
   ListItemButton,
   ListItemIcon,
+  Avatar,
+  ClickAwayListener,
+  Grid,
+  Paper,
   ListItem,
 } from "@mui/material";
-
+import MuiAppBar from "@mui/material/AppBar";
+import MuiDrawer from "@mui/material/Drawer";
 import {
-  MenuIcon,
-  ChevronRightIcon,
   ArrowBackIosNewOutlined,
   DashboardCustomizeOutlined,
   CommuteOutlined,
@@ -29,7 +30,9 @@ import {
   ChevronLeftOutlined,
   LogoutOutlined,
 } from "@mui/icons-material";
-import { Avatar, ClickAwayListener, Grid, Paper } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { patterns, predicateBreadcrumbFromUrl } from "./breadcrumb";
 import Footer from "./Footer";
