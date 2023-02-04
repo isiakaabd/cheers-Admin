@@ -6,11 +6,10 @@ import App from "App";
 import { AuthPage } from "./AuthPage";
 import { ThemeProvider } from "@emotion/react";
 import { muiTheme } from "muiTheme";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const AppRoutes = () => {
-  console.log(muiTheme);
-  const loginStatus = false;
+  const loginStatus = useSelector((state) => state.auth.token);
   //    useSelector((state) => state.auth.token);
   return (
     <ThemeProvider theme={muiTheme}>

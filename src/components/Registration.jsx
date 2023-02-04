@@ -1,12 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Checkbox, Grid, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form } from "formik/dist";
 import FormikControl from "validation/FormikControl";
 import { CheckBox } from "@mui/icons-material";
 import CustomButton from "./CustomButton";
 import * as Yup from "yup";
+import { useRegisterMutation } from "redux/api/authSlice";
+import { toast } from "react-toastify";
 const Registration = (props) => {
   const validationSchema = Yup.object().shape({
     firstname: Yup.string()
@@ -27,9 +29,13 @@ const Registration = (props) => {
       .max(12, "Maximum 12 digit")
       .required("Phone is required"),
     password: Yup.string()
-      .min(3, "Minimum 3 symbols")
-      .max(50, "Maximum 50 symbols")
-      .required("Password is required"),
+      .required("Enter your password")
+      .min(8, "password too short")
+      .matches(/^(?=.*[a-z])/, "Must contain at least one lowercase character")
+      .matches(/^(?=.*[A-Z])/, "Must contain at least one uppercase character")
+      .matches(/^(?=.*[0-9])/, "Must contain at least one number")
+      .matches(/^(?=.*[!@#%&])/, "Must contain at least one special character"),
+
     confirmPassword: Yup.string("Password")
       .oneOf([Yup.ref("password"), null], "Passwords must match")
       .required("Password is required"),
@@ -38,10 +44,38 @@ const Registration = (props) => {
       "You must accept the terms and conditions"
     ),
   });
+  const navigate = useNavigate();
+  const [signUp, { isLoading: loading }] = useRegisterMutation();
+  const onSubmit = async (values, { setStatus, setSubmitting }) => {
+    const { firstname, lastname, email, phone, password, confirmPassword } =
+      values;
+    const body = {
+      first_name: firstname,
+      last_name: lastname,
+      email,
+      phone,
+      password,
+      password_confirmation: confirmPassword,
+    };
+    const { data, error } = await signUp(body);
+    if (data) {
+      setTimeout(() => {
+        navigate({
+          pathname: "/auth/verify",
+          search: `?email=${email}`,
+        });
+        toast.success(data);
+      }, 3000);
+      // setTimeout(() => (window.location.href = "/auth/verify?email=" + email), 3000)
+    }
+    if (error?.email) toast.error(error.email[0]);
 
+    if (error?.phone) toast.error(error.phone[0]);
+  };
   return (
     <Grid item container>
       <Formik
+        onSubmit={onSubmit}
         validationSchema={validationSchema}
         initialValues={{
           firstname: "",
@@ -164,7 +198,11 @@ const Registration = (props) => {
                   )}
                 </Grid>
                 <Grid item container gap={3}>
-                  <CustomButton title="Submit" type="submit" />
+                  <CustomButton
+                    title="Submit"
+                    type="submit"
+                    isSubmitting={loading}
+                  />
                   <CustomButton
                     title="Cancel"
                     component={Link}

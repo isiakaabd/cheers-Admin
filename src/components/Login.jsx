@@ -2,11 +2,15 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Button, Grid, Typography } from "@mui/material";
 import { Formik, Form } from "formik/dist";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FormikControl from "validation/FormikControl";
 import { SHADOWS } from "utilis";
 import * as Yup from "yup";
 import CustomButton from "./CustomButton";
+import { useLoginMutation } from "redux/api/authSlice";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { getToken } from "redux/auth/auth.reducers";
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
@@ -21,9 +25,28 @@ const loginSchema = Yup.object().shape({
 });
 
 const Login = (props) => {
+  const [signInUser, { isLoading: loading }] = useLoginMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const onSubmit = async (values, { resetForm }) => {
+    const { email, password } = values;
+    const { data, error } = await signInUser({
+      email,
+      password,
+    });
+    if (error) {
+      toast.error(error);
+    } else if (data) {
+      toast.success(data.message);
+      dispatch(getToken(data?.data?.token));
+      resetForm();
+      setTimeout(() => navigate("/dashboard"), 2000);
+    }
+  };
   return (
     <Grid item container>
       <Formik
+        onSubmit={onSubmit}
         validationSchema={loginSchema}
         initialValues={{ email: "", password: "" }}
       >
@@ -76,7 +99,7 @@ const Login = (props) => {
                     component={Link}
                     fontWeight={600}
                     color="primary"
-                    to="#"
+                    to="/auth/forgot-password"
                     sx={{ fontSize: "1.3rem", textDecoration: "none" }}
                   >
                     {" "}
@@ -85,7 +108,11 @@ const Login = (props) => {
                 </Grid>
               </Grid>
               <Grid item container>
-                <CustomButton title={"Submit"} />
+                <CustomButton
+                  title={"Submit"}
+                  isSubmitting={loading}
+                  type="submit"
+                />
               </Grid>
             </Grid>
           </Grid>

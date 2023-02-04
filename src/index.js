@@ -1,4 +1,5 @@
 import React from "react";
+import "react-toastify/dist/ReactToastify.css";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
@@ -7,14 +8,11 @@ import reportWebVitals from "./reportWebVitals";
 import { ToastContainer } from "react-toastify";
 import CssBaseline from "@mui/material/CssBaseline";
 import AppRoutes from "routes/AppRoutes";
-import { ThemeProvider } from "@emotion/react";
-import { muiTheme } from "muiTheme";
 const container = document.getElementById("root");
 const root = createRoot(container);
 
 root.render(
   <React.StrictMode>
-    {/* <ThemeProvider theme={muiTheme}> */}
     <Provider store={store}>
       <CssBaseline />
       <AppRoutes />
@@ -31,7 +29,6 @@ root.render(
         pauseOnHover
       />
     </Provider>
-    {/* </ThemeProvider> */}
   </React.StrictMode>
 );
 

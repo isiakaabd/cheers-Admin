@@ -7,7 +7,12 @@ import Inventories from "pages/inventory";
 import CreateInventory from "pages/inventory/create";
 import ShowInventories from "pages/inventory/show";
 import EditInventory from "pages/inventory/edit";
-import MasterLayout from "pages/MasterLayout";
+import { MasterLayout } from "pages/MasterLayout";
+import MiniDrawer from "pages/Drawer";
+import Vendor from "pages/vendors";
+import Categories from "pages/categories";
+import Dashboard from "pages/Dashboard";
+// import MasterLayout from "pages/MasterLayout";
 // import { MenuTestPage } from "../pages/MenuTestPage";
 // import { getCSSVariableValue } from "../../_metronic/assets/ts/_utils";
 // import Inventories from "../modules/errors/components/inventory";
@@ -35,25 +40,17 @@ const PrivateRoutes = () => {
 
   return (
     <Routes>
-      <Route element={<MasterLayout />}>
+      <Route element={<MiniDrawer />}>
         {/* Redirect to Dashboard after success login/registartion */}
         <Route path="auth/*" element={<Navigate to="/dashboard" />} />
         {/* Pages */}
         {/* <Route path="dashboard" element={<DashboardWrapper />} /> */}
-        <Route path="inventories" element={<Inventories />} />
-        <Route path="inventory/create" element={<CreateInventory />} />
-        <Route path="inventories/:inventoryId" element={<ShowInventories />} />
-        <Route
-          path="inventories/:inventoryId/edit"
-          element={<EditInventory />}
-        />
-        {/* <Route path="categories" element={<Categories />} />
-        <Route path="builder" element={<BuilderPageWrapper />} />
-        <Route path="menu-test" element={<MenuTestPage />} /> */}
-        {/* Lazy Modules */}
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="vendors" element={<Vendor />} />
+        <Route path="categories" element={<Categories />} />
 
-        {/* Page Not Found */}
-        <Route path="*" element={<Navigate to="/error/404" />} />
+        <Route index element={<Inventories />} />
+        {/* <Route path="*" element={<Navigate to="/error/404" />} /> */}
       </Route>
     </Routes>
   );
