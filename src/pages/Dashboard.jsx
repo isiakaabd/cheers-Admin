@@ -33,7 +33,7 @@ const Dashboard = () => {
   return (
     <Grid item container justifyContent="space-between" gap={3} sx={{ py: 3 }}>
       {arr?.map((item, index) => (
-        <Grid item md={3.5} sm={6} xs={12} key={index} sx={{ boxShadow: 0 }}>
+        <Grid item md={3.5} sm={3.5} xs={12} key={index} sx={{ boxShadow: 0 }}>
           <Card
             component={Link}
             variant="outlined"
@@ -47,7 +47,7 @@ const Dashboard = () => {
               flexDirection: "column",
               justifyContent: "center",
               height: "15rem",
-              gap: 3,
+              gap: { md: 3, sm: 1, xs: 3 },
             }}
           >
             <Typography variant="h4" color="primary" fontWeight={700}>
@@ -67,7 +67,7 @@ export default Dashboard;
 
 function Skeletons() {
   return (
-    <Grid item container gap={3} flexWrap="nowrap">
+    <Grid item container gap={3} flexWrap={{ md: "nowrap", xs: "wrap" }}>
       {Array(3)
         .fill(undefined)
         .map((item, index) => (

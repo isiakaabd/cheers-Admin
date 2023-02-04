@@ -17,6 +17,7 @@ import {
   Grid,
   Paper,
   ListItem,
+  useMediaQuery,
 } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import MuiDrawer from "@mui/material/Drawer";
@@ -258,7 +259,9 @@ const HeaderText = () => {
 };
 export default function MiniDrawer() {
   const theme = useTheme();
-  const [open, setOpen] = useState(true);
+  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const [open, setOpen] = useState(fullScreen ? false : true);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -294,7 +297,7 @@ export default function MiniDrawer() {
       icon: CommuteOutlined,
     },
     {
-      id: 3,
+      id: 4,
       name: "Accounts",
       link: "/account",
       icon: SettingsOutlined,

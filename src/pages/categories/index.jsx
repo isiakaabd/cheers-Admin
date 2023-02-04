@@ -24,7 +24,12 @@ const Categories = () => {
           />
         </Grid>
 
-        <Grid item container justifyContent="space-between" gap={4}>
+        <Grid
+          item
+          container
+          justifyContent="space-between"
+          gap={{ md: 4, sm: 2, xs: 4 }}
+        >
           {categories?.length > 0 ? (
             categories?.map((item) => {
               const { id, title, description } = item;
@@ -32,7 +37,7 @@ const Categories = () => {
                 <Grid
                   item
                   md={3.5}
-                  sm={6}
+                  sm={5}
                   xs={12}
                   key={id}
                   sx={{ boxShadow: 0 }}
@@ -92,7 +97,7 @@ function Skeletons() {
         variant="rectangular"
       />
       <Grid item container gap={3}>
-        <Grid item container gap={3} flexWrap="nowrap">
+        <Grid item container gap={3} flexWrap={{ md: "nowrap", xs: "wrap" }}>
           {Array(3)
             .fill(undefined)
             .map((item, index) => (
@@ -104,7 +109,7 @@ function Skeletons() {
               />
             ))}
         </Grid>
-        <Grid item container gap={3} flexWrap="nowrap">
+        <Grid item container gap={3} flexWrap={{ md: "nowrap", xs: "wrap" }}>
           {Array(3)
             .fill(undefined)
             .map((item, index) => (
