@@ -1,12 +1,5 @@
-import { ThemeProvider } from "@emotion/react";
-import { Suspense, useEffect } from "react";
-import {
-  BrowserRouter,
-  Outlet,
-  Route,
-  Routes,
-  useNavigate,
-} from "react-router-dom";
+import { Suspense } from "react";
+import { Outlet } from "react-router-dom";
 import "./App.css";
 import { Grid } from "@mui/material";
 

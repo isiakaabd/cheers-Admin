@@ -12,7 +12,6 @@ const Categories = () => {
   const [open, setOpen] = useState(false);
 
   if (isLoading) return <Skeletons />;
-  // if (error) return <Typography>Something went wrong...</Typography>;
   return (
     <>
       <Grid item container flexDirection="column" gap={2}>

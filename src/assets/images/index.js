@@ -1,4 +1,4 @@
 import logo from "./logo.png";
 
-console.log(logo);
+//eslint-disable-next-line
 export default { logo };

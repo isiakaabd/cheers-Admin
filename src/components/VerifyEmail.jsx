@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
+import { useEffect } from "react";
+
 import { Grid, Typography } from "@mui/material";
 import FormikControl from "validation/FormikControl";
 import CustomButton from "./CustomButton";
@@ -26,8 +26,7 @@ const validationSchema = Yup.object().shape({
 const VerifyEmail = (props) => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [verifyEmail, { isLoading: loading, isError: hasErrors, isSuccess }] =
-    useVerifyEmailMutation();
+  const [verifyEmail, { isLoading: loading }] = useVerifyEmailMutation();
   const [resendVerificationEmail, { error, data, isLoading: resending }] =
     useResendTokenMutation();
   const onSubmit = async (values, { setStatus, setSubmitting }) => {

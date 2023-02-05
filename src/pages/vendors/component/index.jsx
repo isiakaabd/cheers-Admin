@@ -3,7 +3,6 @@ import CustomButton from "components/CustomButton";
 import { Formik, Form } from "formik/dist";
 import { toast } from "react-toastify";
 import {
-  useCreateCategoryMutation,
   useCreateVendorMutation,
   useUpdateCategoryMutation,
 } from "redux/api/admin";
