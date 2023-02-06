@@ -1,4 +1,4 @@
-import {createSlice} from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit";
 
 export const authSlice = createSlice({
   name: "auth",
@@ -9,17 +9,21 @@ export const authSlice = createSlice({
 
   reducers: {
     getToken(state, action) {
-      state.token = action.payload
-      localStorage.setItem("access-token", action.payload)
+      state.token = action.payload;
+      localStorage.setItem("access-token", action.payload);
     },
-
+    getUserDetails(state, action) {
+      state.bearerToken = action.payload.token;
+      state.user = action.payload.user;
+      localStorage.setItem("access-token", action.payload.token);
+    },
     logOut(state, action) {
-      state.token = null
-      localStorage.removeItem("access-token")
+      state.token = null;
+      localStorage.removeItem("access-token");
     },
   },
-})
+});
 
-const {reducer, actions} = authSlice
-export const {getToken, logOut} = actions
-export default reducer
+const { reducer, actions } = authSlice;
+export const { getToken, logOut, getUserDetails } = actions;
+export default reducer;

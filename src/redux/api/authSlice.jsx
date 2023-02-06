@@ -8,6 +8,7 @@ export const authSlice = api.injectEndpoints({
         method: "POST",
         body,
       }),
+      invalidatesTags: ["user"],
       transformErrorResponse: (error) => error.data.message,
       transformResponse: (data) => data,
     }),
@@ -17,6 +18,7 @@ export const authSlice = api.injectEndpoints({
         method: "POST",
         body: JSON.stringify(body),
       }),
+      invalidatesTags: ["user"],
       transformErrorResponse: (error) => error.data.errors,
       transformResponse: (data) => data.message,
     }),
@@ -56,6 +58,25 @@ export const authSlice = api.injectEndpoints({
       transformErrorResponse: (error) => error.message,
       transformResponse: (data) => data.data,
     }),
+    refreshToken: builder.mutation({
+      query: (body) => ({
+        url: "/refresh-token",
+        method: "POST",
+        body,
+      }),
+      transformErrorResponse: (error) => error.message,
+      transformResponse: (data) => data.data,
+    }),
+    logout: builder.mutation({
+      query: (body) => ({
+        url: "/logout",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["user"],
+      transformErrorResponse: (error) => error.message,
+      transformResponse: (data) => data.message,
+    }),
     getAdminProfile: builder.query({
       query: () => ({
         url: "",
@@ -71,8 +92,10 @@ export const {
   useLoginMutation,
   useResendTokenMutation,
   useVerifyEmailMutation,
+  useRefreshTokenMutation,
   useRegisterMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
+  useLogoutMutation,
   useGetAdminProfileQuery,
 } = authSlice;

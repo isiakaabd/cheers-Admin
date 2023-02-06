@@ -41,6 +41,7 @@ import images from "assets/images";
 import { useDispatch } from "react-redux";
 import { logOut } from "redux/auth/auth.reducers";
 import { toast } from "react-toastify";
+import { useLogoutMutation } from "redux/api/authSlice";
 
 const drawerWidth = 260;
 
@@ -303,10 +304,17 @@ export default function MiniDrawer() {
     },
   ];
   const dispatch = useDispatch();
+  const [logout] = useLogoutMutation();
   const handleClicks = async () => {
-    setTimeout(() => dispatch(logOut()), 3000);
-    toast.success("Logout Successful");
-    setTimeout(() => navigate("/auth/login"), 2000);
+    const { data, error } = await logout();
+
+    if (data) {
+      toast.success(data);
+      setTimeout(() => dispatch(logOut()), 3000);
+
+      setTimeout(() => navigate("/auth/login"), 2000);
+    }
+    if (error) toast.error(error);
   };
   const navigate = useNavigate();
   const [id, setId] = useState(0);
