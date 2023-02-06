@@ -100,7 +100,6 @@ const Drawer = styled(MuiDrawer, {
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: "nowrap",
-  backgroundColor: "red",
   boxSizing: "border-box",
   ...(open && {
     ...openedMixin(theme),
@@ -317,7 +316,6 @@ export default function MiniDrawer() {
       <AppBar
         position="fixed"
         open={open}
-        elevation={6}
         sx={{ shadow: 0, background: "#eff2f5" }}
       >
         <Toolbar>
@@ -372,7 +370,14 @@ export default function MiniDrawer() {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <List
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+            pb: "2.5rem",
+          }}
+        >
           {sidebarItem.map((text, index) => (
             <ListItem
               key={text.id}
@@ -380,6 +385,7 @@ export default function MiniDrawer() {
               sx={{
                 display: "block",
                 color: "#9899ac",
+
                 "&:hover >*, &:hover &.MuiListItemIcon-root": {
                   color: "#fff !important",
                   transition: "color 1ms ease-in",
@@ -481,11 +487,15 @@ export default function MiniDrawer() {
         }}
       >
         <DrawerHeader />
-        <Grid item container sx={{ background: "#eff2f5", height: "100%" }}>
+        <Grid
+          item
+          container
+          sx={{ background: "#eff2f5", height: "100%", pb: "5rem" }}
+        >
           <Outlet />
         </Grid>
         <Grid sx={{ mt: "auto" }}>
-          <Footer />{" "}
+          <Footer open={open} />
         </Grid>
       </Box>
     </Box>
