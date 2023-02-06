@@ -117,7 +117,9 @@ function Rows({ row }) {
         {name}
       </TableCell>
       <TableCell align="left">
-        <a href={url}>{url}</a>
+        <a href={url} rel="noreferrer" target="_blank">
+          {url}
+        </a>
       </TableCell>
       <TableCell align="left">{getTimeMoment(created_at)}</TableCell>
       <TableCell align="left">
