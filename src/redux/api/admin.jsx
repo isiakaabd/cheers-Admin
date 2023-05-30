@@ -78,12 +78,12 @@ export const adminSlice = api.injectEndpoints({
       //   transformErrorResponse: (error) => error.data.message,
     }),
     deleteCategory: builder.mutation({
-      query: ({ categoryId, name }) => ({
+      query: ({ categoryId }) => ({
         url: `/categories/${categoryId}`,
-        method: "PUT",
-        body: { name },
+        method: "DELETE",
       }),
       invalidatesTags: ["categories"],
+      transformResponse: (response) => response.message,
     }),
     activateOrDeactivateVendor: builder.mutation({
       query: (id) => ({

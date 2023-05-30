@@ -41,10 +41,9 @@ const SingleCategory = () => {
   const handleDelete = async (e) => {
     const { data, error } = await deleteCategory({
       categoryId: id,
-      name: title,
     });
     if (data) {
-      toast.success("Category deleted successfully");
+      toast.success(data);
       handleClose(e);
       setTimeout(() => navigate("/categories"), 3000);
     }
