@@ -8,7 +8,7 @@ const Profile = () => {
   const { data: profile, isLoading, error } = useGetAdminProfileQuery();
 
   if (isLoading) return <Skeletons />;
-  if (error) return <Typography>Something went wrong..</Typography>;
+  if (error || !profile) return <Typography>Something went wrong..</Typography>;
   const { email, first_name, last_name, phone } = profile;
   return (
     <Grid item container>

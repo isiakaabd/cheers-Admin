@@ -7,6 +7,9 @@ import Categories from "pages/categories";
 import Dashboard from "pages/Dashboard";
 import SingleCategory from "pages/categories/SingleCategory";
 import Profile from "pages/profile";
+import Users from "pages/users";
+import MessageCenter from "pages/message-center";
+import Orders from "pages/orders";
 
 const PrivateRoutes = () => {
   //   const BuilderPageWrapper = lazy(() =>
@@ -31,6 +34,9 @@ const PrivateRoutes = () => {
         <Route path="auth/*" element={<Navigate to="/dashboard" />} />
 
         <Route path="dashboard" element={<Dashboard />} />
+        <Route path="users" element={<Users />} />
+        <Route path="message-center" element={<MessageCenter />} />
+        <Route path="orders" element={<Orders />} />
         <Route path="global-vendors" element={<Vendor />} />
         <Route path="vendors" element={<Vendors />} />
         <Route path="categories" element={<Categories />} />

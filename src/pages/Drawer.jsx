@@ -30,6 +30,9 @@ import {
   SettingsOutlined,
   ChevronLeftOutlined,
   LogoutOutlined,
+  PersonAddAltOutlined,
+  CarRentalOutlined,
+  MessageOutlined,
 } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -286,21 +289,39 @@ export default function MiniDrawer() {
     },
     {
       id: 2,
+      name: "Users",
+      link: "/users",
+      icon: PersonAddAltOutlined,
+    },
+    {
+      id: 3,
       name: "Vendors",
       link: "/vendors",
       icon: PersonAddAlt1Outlined,
     },
     {
-      id: 3,
+      id: 4,
+      name: "Orders",
+      link: "/orders",
+      icon: CarRentalOutlined,
+    },
+    {
+      id: 5,
       name: "Categories",
       link: "/categories",
       icon: CommuteOutlined,
     },
     {
-      id: 4,
+      id: 6,
       name: "Accounts",
       link: "/account",
       icon: SettingsOutlined,
+    },
+    {
+      id: 7,
+      name: "Message Center",
+      link: "/message-center",
+      icon: MessageOutlined,
     },
   ];
   const dispatch = useDispatch();

@@ -1,4 +1,8 @@
 import { DeleteOutline, MoreHorizOutlined } from "@mui/icons-material";
+import FormikControl from "validation/FormikControl";
+
+import { Formik, Form } from "formik/dist";
+import CustomButton from "components/CustomButton";
 import {
   Grid,
   Card,
@@ -10,7 +14,6 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import CustomButton from "components/CustomButton";
 import Dialogs from "components/Dialog";
 import EmptyCell from "components/EmptyTable";
 import BasicTable from "components/Table";
@@ -25,21 +28,58 @@ import BasicMenu from "components/MenuComponent";
 import { toast } from "react-toastify";
 
 const Vendor = () => {
-  const { data: vendors, isLoading: loading } = useGetAllVendorsQuery();
+  const {
+    data: vendors,
+    isLoading: loading,
+    isFetching,
+  } = useGetAllVendorsQuery();
 
   const [open, setOpen] = useState(false);
   if (loading) return <Skeletons />;
+  const onSubmit = () => {};
   const headcells = ["Name", "Link", "Created At", "Delete"];
   return (
     <>
       <Grid item container flexDirection="column">
-        <Grid item sx={{ ml: "auto", mb: 3 }}>
-          <CustomButton
-            title="Add Global Vendor"
-            type="button"
-            onClick={() => setOpen(true)}
-          />
+        {/* <Grid item sx={{ ml: "auto", mb: 3 }}> */}
+        <Grid
+          item
+          container
+          alignItems="center"
+          gap={{ md: 8, xs: 2 }}
+          sx={{ my: 3 }}
+          flexWrap={"nowrap"}
+        >
+          <Grid item flex={1}>
+            <Formik initialValues={{ search: "" }} onSubmit={onSubmit}>
+              <Form noValidate style={{ width: "100%" }}>
+                <Grid item container gap={2}>
+                  <Grid item flex={1}>
+                    <FormikControl
+                      name="search"
+                      placeholder="Search Vendor by Name"
+                    />
+                  </Grid>
+                  <Grid item>
+                    <CustomButton
+                      title="Search"
+                      type="submit"
+                      disabled={isFetching}
+                    />
+                  </Grid>
+                </Grid>
+              </Form>
+            </Formik>
+          </Grid>
+          <Grid item>
+            <CustomButton
+              title="Add Global Vendor"
+              type="button"
+              onClick={() => setOpen(true)}
+            />
+          </Grid>
         </Grid>
+
         <Card sx={{ width: "100%" }}>
           {vendors?.data?.length > 0 ? (
             <Grid

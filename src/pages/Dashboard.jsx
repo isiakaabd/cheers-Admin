@@ -13,17 +13,27 @@ const Dashboard = () => {
   if (loading || load || isLoading) return <Skeletons />;
   const arr = [
     {
+      name: "Total Users",
+      value: vendor?.total || 0,
+      link: "/#",
+    },
+    {
       name: "Global Vendor",
       value: vendor?.total || 0,
       link: "/global-vendors",
     },
     {
-      name: "Total Categories",
+      name: "Local Vendor",
+      value: vendor?.total || 0,
+      link: "/#",
+    },
+    {
+      name: "Total Funded",
       value: category?.length || 0,
       link: "/categories",
     },
     {
-      name: "Vendors",
+      name: "Wishlisted Item",
       value: vendors?.length || 0,
       link: "/vendors",
     },
@@ -67,7 +77,7 @@ export default Dashboard;
 function Skeletons() {
   return (
     <Grid item container gap={3} flexWrap={{ md: "nowrap", xs: "wrap" }}>
-      {Array(3)
+      {Array(5)
         .fill(undefined)
         .map((item, index) => (
           <Skeleton

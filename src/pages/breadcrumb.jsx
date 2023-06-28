@@ -2,6 +2,9 @@ export const patterns = {
   // PATIENTS PATTERNS
   Dashboard: "dashbaord",
   Vendors: "vendors",
+  Users: "users",
+  Orders: "orders",
+  "Message Center": "message-center",
   "Global Vendors": "global-vendors",
   Categories: "categories",
   Settings: "account/settings",
