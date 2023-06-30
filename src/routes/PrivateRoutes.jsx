@@ -1,5 +1,5 @@
 import { Route, Routes, Navigate } from "react-router-dom";
-import Inventories from "pages/inventory";
+// import Inventories from "pages/inventory";
 import MiniDrawer from "pages/Drawer";
 import Vendor from "pages/vendors";
 import Vendors from "pages/vendor";
@@ -10,6 +10,7 @@ import Profile from "pages/profile";
 import Users from "pages/users";
 import MessageCenter from "pages/message-center";
 import Orders from "pages/orders";
+import LocalOrders from "pages/local-order";
 
 const PrivateRoutes = () => {
   //   const BuilderPageWrapper = lazy(() =>
@@ -39,11 +40,12 @@ const PrivateRoutes = () => {
         <Route path="orders" element={<Orders />} />
         <Route path="global-vendors" element={<Vendor />} />
         <Route path="vendors" element={<Vendors />} />
+        <Route path="local-orders" element={<LocalOrders />} />
         <Route path="categories" element={<Categories />} />
         <Route path="categories/:id" element={<SingleCategory />} />
         <Route path="account" element={<Profile />} />
 
-        <Route index element={<Inventories />} />
+        {/* <Route index element={<Inventories />} /> */}
         {/* <Route path="*" element={<Navigate to="/error/404" />} /> */}
       </Route>
     </Routes>

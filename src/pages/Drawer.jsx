@@ -33,6 +33,7 @@ import {
   PersonAddAltOutlined,
   CarRentalOutlined,
   MessageOutlined,
+  HouseOutlined,
 } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -304,6 +305,12 @@ export default function MiniDrawer() {
       name: "Orders",
       link: "/orders",
       icon: CarRentalOutlined,
+    },
+    {
+      id: 4,
+      name: "Local Orders",
+      link: "/local-orders",
+      icon: HouseOutlined,
     },
     {
       id: 5,

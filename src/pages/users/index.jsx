@@ -58,7 +58,7 @@ const Users = () => {
                 paginationLabel="vendors per page"
                 hasCheckbox={false}
                 per_page={vendors?.per_page}
-                totalPage={vendors?.to}
+                totalPage={vendors?.length}
                 nextPageUrl={vendors?.next_page_url}
               >
                 {[

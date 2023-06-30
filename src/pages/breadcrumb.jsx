@@ -4,6 +4,7 @@ export const patterns = {
   Vendors: "vendors",
   Users: "users",
   Orders: "orders",
+  "Local Orders": "local-orders",
   "Message Center": "message-center",
   "Global Vendors": "global-vendors",
   Categories: "categories",

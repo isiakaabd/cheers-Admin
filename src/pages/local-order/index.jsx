@@ -11,6 +11,7 @@ import {
 import {
   Avatar,
   Card,
+  Checkbox,
   Grid,
   IconButton,
   ListItemIcon,
@@ -35,19 +36,18 @@ import {
 import { getDate } from "utilis";
 import FormikControl from "validation/FormikControl";
 
-const Orders = () => {
+const LocalOrders = () => {
   const { data: vendors, isLoading, isFetching } = useGetMainVendorsQuery();
 
   const headcells = [
     "Name",
     "Phone",
-    // "Email",
-    " Address",
-    // "Email",
     "Item Name",
-    "URL",
+    "Order No",
     "Price",
     "Status",
+    "Settlement",
+    "",
   ];
   if (isLoading) return <Skeletons />;
   const onSubmit = () => {};
@@ -96,14 +96,14 @@ const Orders = () => {
             <BasicTable
               tableHead={headcells}
               rows={vendors}
-              paginationLabel="vendors per page"
-              hasCheckbox={false}
+              paginationLabel="Orders per page"
+              hasCheckbox
               per_page={vendors?.per_page}
               totalPage={vendors?.to}
               nextPageUrl={vendors?.next_page_url}
             >
               {vendors?.map((row) => (
-                <Rows key={row.id} row={row} />
+                <Rows key={row.id} row={row} hasCheckbox={true} />
               ))}
             </BasicTable>
           </Grid>
@@ -118,7 +118,7 @@ const Orders = () => {
   );
 };
 
-function Rows({ row }) {
+function Rows({ row, hasCheckbox }) {
   const {
     id,
     phone,
@@ -153,6 +153,20 @@ function Rows({ row }) {
   };
   return (
     <TableRow tabIndex={-1} sx={{ cursor: "pointer" }}>
+      {hasCheckbox && (
+        <TableCell padding="checkbox">
+          <Checkbox
+            size="large"
+            color="primary"
+            onClick={(event) => {
+              event.stopPropagation();
+              //   handleClicks(event, id);
+            }}
+            // checked={isItemSelected}
+          />
+        </TableCell>
+      )}
+
       <TableCell scope="row" align="left">
         <Grid item container alignItems="center" gap={1} flexWrap="nowrap">
           <Avatar src={profile_picture}>
@@ -168,10 +182,8 @@ function Rows({ row }) {
       <TableCell align="left">{phone}</TableCell>
       <TableCell align="left">{vendor_name || "No Vendor Name"}</TableCell>
       <TableCell align="left">{getDate(created_at)}</TableCell>
-      {/* <TableCell align="left">{getDate(created_at)}</TableCell> */}
-      {/* <TableCell align="left">{getDate(created_at)}</TableCell> */}
-      <TableCell align="left">{getDate(created_at)}</TableCell>
-      <TableCell align="left">{getDate(created_at)}</TableCell>
+      <TableCell align="left">{getDate(vendor_name)}</TableCell>
+      <TableCell align="left">{getDate(vendor_name)}</TableCell>
       <TableCell align="left">
         <IconButton
           id="basic-button"
@@ -248,4 +260,4 @@ function Skeletons() {
     </Grid>
   );
 }
-export default Orders;
+export default LocalOrders;
