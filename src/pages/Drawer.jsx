@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useLayoutEffect } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 
 import {
@@ -46,6 +46,7 @@ import { useDispatch } from "react-redux";
 import { logOut } from "redux/auth/auth.reducers";
 import { toast } from "react-toastify";
 import { useLogoutMutation } from "redux/api/authSlice";
+import NotificationMenu from "components/NotificationMenu";
 
 const drawerWidth = 260;
 
@@ -245,6 +246,7 @@ const HeaderText = () => {
       return <Breadcrumb breadcrumbs={breadcrumbs} />;
   }
 };
+
 export default function MiniDrawer() {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -254,7 +256,15 @@ export default function MiniDrawer() {
   const handleDrawerOpen = () => {
     setOpen(true);
   };
+  const [id, setId] = useState(0);
+  const location = useLocation();
+  useLayoutEffect(() => {
+    sidebarItem.map((page) =>
+      page.link === location.pathname ? setId(page.id) : null
+    );
 
+    //eslint-disable-next-line
+  }, [location.pathname]);
   const handleDrawerClose = () => {
     setOpen(false);
   };
@@ -329,7 +339,7 @@ export default function MiniDrawer() {
     if (error) toast.error(error);
   };
   const navigate = useNavigate();
-  const [id, setId] = useState(0);
+
   return (
     <Box sx={{ display: "flex", width: "100%", height: "100%" }}>
       <CssBaseline />
@@ -339,24 +349,29 @@ export default function MiniDrawer() {
         sx={{ shadow: 0, background: "#eff2f5" }}
       >
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              color: "#1a1a27",
-              "&:hover": {
+          <Grid item flex={1}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{
+                marginRight: 5,
                 color: "#1a1a27",
-              },
-              ...(open && { display: "none" }),
-            }}
-          >
-            <MenuIcon sx={{ fontSize: "3rem" }} />
-          </IconButton>
+                "&:hover": {
+                  color: "#1a1a27",
+                },
+                ...(open && { display: "none" }),
+              }}
+            >
+              <MenuIcon sx={{ fontSize: "3rem" }} />
+            </IconButton>
 
-          <HeaderText />
+            <HeaderText />
+          </Grid>
+          <Grid item>
+            <NotificationMenu menuList={["list"]} />
+          </Grid>
         </Toolbar>
       </AppBar>
       <Drawer
