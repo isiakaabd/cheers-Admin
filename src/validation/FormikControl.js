@@ -10,6 +10,7 @@ import SelectAdornment from "./SelectAdornment";
 import SwitchComponent from "./Switch";
 import { UploadComponent } from "./Files";
 import CheckBox from "./CheckBox";
+import TextArea from "./Textarea";
 // import Files from "./File";
 // import Files2 from "./File2";
 // import DateTimePicker from "./DateTimePicker";
@@ -30,7 +31,8 @@ const FormikControl = ({ control, ...rest }) => {
       return <UploadComponent {...rest} />;
     case "checkbox":
       return <CheckBox {...rest} />;
-
+    case "textarea":
+      return <TextArea {...rest} />;
     default:
       return null;
   }

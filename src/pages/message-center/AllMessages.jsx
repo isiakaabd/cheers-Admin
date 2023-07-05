@@ -1,21 +1,8 @@
-import {
-  BiotechOutlined,
-  BlockRounded,
-  DeleteOutline,
-  MoreHorizOutlined,
-  ResetTvRounded,
-  ToggleOffOutlined,
-  ToggleOnOutlined,
-  VerifiedOutlined,
-} from "@mui/icons-material";
+import { VerifiedOutlined } from "@mui/icons-material";
 import {
   Avatar,
   Card,
   Grid,
-  IconButton,
-  ListItemIcon,
-  ListItemText,
-  MenuItem,
   Skeleton,
   TableCell,
   TableRow,
@@ -23,31 +10,23 @@ import {
 } from "@mui/material";
 import CustomButton from "components/CustomButton";
 import EmptyCell from "components/EmptyTable";
-import BasicMenu from "components/MenuComponent";
 import BasicTable from "components/Table";
 import { Formik, Form } from "formik/dist";
-import React, { useState } from "react";
-import { toast } from "react-toastify";
-import {
-  useGetMainVendorsQuery,
-  useToggleVendorMutation,
-} from "redux/api/admin";
+
+import { useNavigate } from "react-router-dom";
+import { useGetMainVendorsQuery } from "redux/api/admin";
 import { getDate } from "utilis";
 import FormikControl from "validation/FormikControl";
 
-const Orders = () => {
+const AllMessages = () => {
   const { data: vendors, isLoading, isFetching } = useGetMainVendorsQuery();
 
   const headcells = [
     "Name",
-    "Phone",
-    // "Email",
-    " Address",
-    // "Email",
-    "Item Name",
-    "URL",
-    "Price",
-    "Status",
+    "Store Name",
+    "Date Joined",
+    "No of Messages",
+    "No of Responses",
   ];
   if (isLoading) return <Skeletons />;
   const onSubmit = () => {};
@@ -68,7 +47,7 @@ const Orders = () => {
                 <Grid item flex={1}>
                   <FormikControl
                     name="search"
-                    placeholder="Search Order by Id"
+                    placeholder="Search Vendor by Name"
                   />
                 </Grid>
                 <Grid item>
@@ -130,29 +109,15 @@ function Rows({ row }) {
     is_closed,
     created_at,
   } = row;
-  const [toggleVendor, { isLoading: deleting }] = useToggleVendorMutation();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const navigate = useNavigate();
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const handleToggle = async () => {
-    const { error, data } = await toggleVendor({ vendor_id: id });
-    if (data) {
-      toast.success(data?.message);
-      setTimeout(() => handleClose(), 1000);
-    }
-    if (error) toast.error(error);
-  };
-  const handleDelete = async () => {
-    setTimeout(() => handleClose(), 1000);
-  };
   return (
-    <TableRow tabIndex={-1} sx={{ cursor: "pointer" }}>
+    <TableRow
+      tabIndex={-1}
+      sx={{ cursor: "pointer" }}
+      hover
+      onClick={() => navigate(`${id}`)}
+    >
       <TableCell scope="row" align="left">
         <Grid item container alignItems="center" gap={1} flexWrap="nowrap">
           <Avatar src={profile_picture}>
@@ -168,71 +133,7 @@ function Rows({ row }) {
       <TableCell align="left">{phone}</TableCell>
       <TableCell align="left">{vendor_name || "No Store Name"}</TableCell>
       <TableCell align="left">{getDate(created_at)}</TableCell>
-      {/* <TableCell align="left">{getDate(created_at)}</TableCell> */}
-      {/* <TableCell align="left">{getDate(created_at)}</TableCell> */}
       <TableCell align="left">{getDate(created_at)}</TableCell>
-      <TableCell align="left">{getDate(created_at)}</TableCell>
-      <TableCell align="left">
-        <IconButton
-          id="basic-button"
-          aria-controls={open ? "basic-menu" : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
-          onClick={handleClick}
-        >
-          <MoreHorizOutlined />
-        </IconButton>
-
-        <BasicMenu
-          open={open}
-          anchorEl={anchorEl}
-          setAnchorEl={setAnchorEl}
-          handleClick={handleClick}
-          handleClose={handleClose}
-        >
-          <MenuItem>
-            <ListItemIcon>
-              <ResetTvRounded fontSize="large" />
-            </ListItemIcon>
-
-            <ListItemText>{"Reset Password"}</ListItemText>
-          </MenuItem>
-          <MenuItem onClick={handleDelete}>
-            <ListItemIcon>
-              <DeleteOutline fontSize="large" />
-            </ListItemIcon>
-
-            <ListItemText>{"Delete User"}</ListItemText>
-          </MenuItem>
-          <MenuItem onClick={handleDelete}>
-            <ListItemIcon>
-              <BlockRounded fontSize="large" />
-            </ListItemIcon>
-
-            <ListItemText>{"Block User"}</ListItemText>
-          </MenuItem>
-          <MenuItem onClick={handleDelete}>
-            <ListItemIcon>
-              <BiotechOutlined fontSize="large" />
-            </ListItemIcon>
-
-            <ListItemText>{"CHange User's Birthday"}</ListItemText>
-          </MenuItem>
-          <MenuItem onClick={handleToggle}>
-            <ListItemIcon>
-              {is_closed ? (
-                <ToggleOnOutlined fontSize="large" sx={{ color: "green" }} />
-              ) : (
-                <ToggleOffOutlined fontSize="large" sx={{ color: "red" }} />
-              )}
-            </ListItemIcon>
-
-            <ListItemText>
-              {deleting ? "loading" : is_closed ? "Active" : "InActive"}
-            </ListItemText>
-          </MenuItem>
-        </BasicMenu>
-      </TableCell>
     </TableRow>
   );
 }
@@ -248,4 +149,4 @@ function Skeletons() {
     </Grid>
   );
 }
-export default Orders;
+export default AllMessages;

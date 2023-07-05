@@ -180,7 +180,7 @@ function Rows({ row, hasCheckbox }) {
         {name}
       </TableCell>
       <TableCell align="left">{phone}</TableCell>
-      <TableCell align="left">{vendor_name || "No Vendor Name"}</TableCell>
+      <TableCell align="left">{vendor_name || "No Store Name"}</TableCell>
       <TableCell align="left">{getDate(created_at)}</TableCell>
       <TableCell align="left">{getDate(vendor_name)}</TableCell>
       <TableCell align="left">{getDate(vendor_name)}</TableCell>

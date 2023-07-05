@@ -11,6 +11,8 @@ import Users from "pages/users";
 import MessageCenter from "pages/message-center";
 import Orders from "pages/orders";
 import LocalOrders from "pages/local-order";
+import AllMessages from "pages/message-center/AllMessages";
+import Message from "pages/message-center/Message";
 
 const PrivateRoutes = () => {
   //   const BuilderPageWrapper = lazy(() =>
@@ -36,7 +38,9 @@ const PrivateRoutes = () => {
 
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="users" element={<Users />} />
-        <Route path="message-center" element={<MessageCenter />} />
+        <Route path="messages" element={<AllMessages />} />
+        <Route path="messages/:id" element={<MessageCenter />} />
+        <Route path="messages/:id/:ids" element={<Message />} />
         <Route path="orders" element={<Orders />} />
         <Route path="global-vendors" element={<Vendor />} />
         <Route path="vendors" element={<Vendors />} />

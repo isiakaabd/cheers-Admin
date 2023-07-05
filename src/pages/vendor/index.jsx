@@ -41,7 +41,7 @@ const Vendors = () => {
   const headcells = [
     "Name",
     "Phone",
-    "Vendor Name",
+    "Store Name",
     " Address",
     "Email",
     "Date Joined",
@@ -165,7 +165,7 @@ function Rows({ row }) {
         {name}
       </TableCell>
       <TableCell align="left">{phone}</TableCell>
-      <TableCell align="left">{vendor_name || "No Vendor Name"}</TableCell>
+      <TableCell align="left">{vendor_name || "No Store Name"}</TableCell>
       <TableCell align="left">{getDate(created_at)}</TableCell>
       <TableCell align="left">{getDate(created_at)}</TableCell>
       <TableCell align="left">{getDate(created_at)}</TableCell>
