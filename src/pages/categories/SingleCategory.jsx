@@ -20,7 +20,7 @@ import {
 } from "redux/api/admin";
 import { getDate } from "utilis";
 
-import Create from "./component";
+import Create, { isValidJSON } from "./component";
 
 const SingleCategory = () => {
   const { id } = useParams();
@@ -37,7 +37,7 @@ const SingleCategory = () => {
   };
   const [opens, setOpens] = useState(false);
   if (isLoading) return <Skeleton />;
-  const { title, createdAt, description } = category;
+  const { title, createdAt, description, properties } = category;
   const handleDelete = async (e) => {
     const { data, error } = await deleteCategory({
       categoryId: id,
@@ -121,6 +121,28 @@ const SingleCategory = () => {
               {description || "No Description"}
             </Typography>
           </Grid>
+          <Grid item container gap={2}>
+            <Typography color="text.primary" fontWeight={700}>
+              Properties:
+            </Typography>
+
+            {properties && isValidJSON(properties) ? (
+              JSON.parse(properties).map((property) => {
+                return (
+                  <Grid item container key={property.name} gap={2}>
+                    <Typography color="text.primary">
+                      {property?.name}:
+                    </Typography>
+                    <Typography color="text.primary">
+                      {property?.variants?.join(",")}
+                    </Typography>
+                  </Grid>
+                );
+              })
+            ) : (
+              <Typography color="text.primary">No Properties Yet</Typography>
+            )}
+          </Grid>
         </Card>
       </Grid>
 
@@ -137,6 +159,7 @@ const SingleCategory = () => {
           id={id}
           setOpen={setOpens}
           description={description}
+          propertiesArray={properties}
           type="edit"
           heading={"Edit Category"}
         />
