@@ -27,7 +27,6 @@ import {
   CommuteOutlined,
   KeyboardArrowDownOutlined,
   PersonAddAlt1Outlined,
-  // SettingsOutlined,
   ChevronLeftOutlined,
   LogoutOutlined,
   PersonAddAltOutlined,
