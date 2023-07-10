@@ -36,11 +36,18 @@ const Create = ({
   const [create, { isLoading: loading }] = useCreateCategoryMutation();
   const handleSubmit = async (values) => {
     const { title, description, propertiesArray } = values;
-
+    console.log(propertiesArray);
     let x = propertiesArray.map((item) => {
+      // console.log(typeof item.variants);
+      // if (typeof item.variants === "string") {
+      //   console.log(item.variants);
+      // }
       return {
         name: item.name,
-        variants: item.variants.split(",").map((variant) => variant.trim()),
+        variants:
+          typeof item.variants === "string"
+            ? item.variants.split(",").map((variant) => variant.trim())
+            : item.variants,
       };
     });
     let stingifyObj = JSON.stringify(x);
@@ -57,7 +64,6 @@ const Create = ({
 
     formData.append("_method", "PUT");
     if (isValidJSON(stingifyObj)) {
-      console.log(stingifyObj);
       const { data, error } = await updateCategory({
         x: obj,
         categoryId: id,
