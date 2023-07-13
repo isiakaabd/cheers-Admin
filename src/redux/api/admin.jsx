@@ -5,7 +5,6 @@ export const adminSlice = api.injectEndpoints({
     getAllVendors: builder.query({
       query: () => ({
         url: "/global-vendors",
-        method: "GET",
       }),
       providesTags: ["vendors"],
       transformResponse: (response) => response.data,
@@ -14,7 +13,6 @@ export const adminSlice = api.injectEndpoints({
     getAllCategories: builder.query({
       query: () => ({
         url: "/categories",
-        method: "GET",
       }),
       providesTags: ["categories"],
       transformResponse: (response) => response.data,
@@ -39,18 +37,59 @@ export const adminSlice = api.injectEndpoints({
     getCategory: builder.query({
       query: (categoryId) => ({
         url: `/categories/${categoryId}`,
-        method: "GET",
       }),
       transformResponse: (response) => response.data,
       providesTags: ["categories"],
     }),
+    getAllUsers: builder.query({
+      query: () => ({
+        url: `/get-all-users`,
+      }),
+      transformResponse: (response) => response.data,
+      providesTags: ["users"],
+    }),
+    deleteUserAccount: builder.mutation({
+      query: (body) => ({
+        url: `/delete-user`,
+        method: "POST",
+        body,
+      }),
+      transformResponse: (response) => response.data,
+      transformErrorResponse: (response) => response.data.message,
+      invalidatesTags: ["users", "user"],
+    }),
+    changeBirthday: builder.mutation({
+      query: (body) => ({
+        url: `/change-birthdate`,
+        method: "POST",
+        body,
+      }),
+      transformResponse: (response) => response.data,
+      transformErrorResponse: (response) => response.data.message,
+      invalidatesTags: ["users", "user"],
+    }),
+    blockUser: builder.mutation({
+      query: (body) => ({
+        url: `/block-user`,
+        method: "POST",
+        body,
+      }),
+      transformResponse: (response) => response.data,
+      transformErrorResponse: (response) => response.data.message,
+      invalidatesTags: ["users", "user"],
+    }),
     getMainVendors: builder.query({
       query: () => ({
         url: `/get-vendors`,
-        method: "GET",
       }),
       transformResponse: (response) => response.data,
       providesTags: ["vendor"],
+    }),
+    getDashboardAnalytics: builder.query({
+      query: () => ({
+        url: `/dashboard-analytics`,
+      }),
+      transformResponse: (response) => response.data,
     }),
     toggleVendor: builder.mutation({
       query: (body) => ({
@@ -102,9 +141,14 @@ export const {
   useDeleteAvendorMutation,
   useActivateOrDeactivateVendorMutation,
   useGetCategoryQuery,
+  useChangeBirthdayMutation,
   useDeleteCategoryMutation,
+  useGetAllUsersQuery,
   useGetMainVendorsQuery,
   useCreateCategoryMutation,
   useToggleVendorMutation,
+  useDeleteUserAccountMutation,
   useUpdateCategoryMutation,
+  useGetDashboardAnalyticsQuery,
+  useBlockUserMutation,
 } = adminSlice;

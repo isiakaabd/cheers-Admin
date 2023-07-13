@@ -66,3 +66,18 @@ export const getTimeMoment = (startDate) => {
 export const getDate = (date) => {
   return moment(date).format("DD-MM-YYYY");
 };
+export const formatedDate = (date) => {
+  let originalDateString = date;
+
+  // Step 1: Parse the original date string into a Date object
+  let originalDateParts = originalDateString.split("/");
+  let originalDate = new Date(
+    originalDateParts[2],
+    originalDateParts[1] - 1,
+    originalDateParts[0]
+  );
+
+  // Step 2: Format the date object into the desired format
+  let formattedDate = originalDate.toISOString();
+  return getDate(formattedDate);
+};

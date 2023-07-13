@@ -78,9 +78,9 @@ const Create = ({
       if (error) toast.error(error);
       else {
         console.log("Error");
-        toast.error(
-          "An error occurred while trying to process your properties. Please try again"
-        );
+        // toast.error(
+        //   "An error occurred while trying to process your properties. Please try again"
+        // );
       }
     }
     // const { data, error } = await updateCategory({ x, categoryId: id });
@@ -120,9 +120,9 @@ const Create = ({
       if (error) toast.error(error);
       else {
         console.log("Error");
-        toast.error(
-          "An error occurred while trying to process your properties. Please try again"
-        );
+        // toast.error(
+        //   "An error occurred while trying to process your properties. Please try again"
+        // );
       }
     }
   };

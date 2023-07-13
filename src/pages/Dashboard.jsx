@@ -1,41 +1,47 @@
 import { Grid, Card, Typography, Skeleton } from "@mui/material";
-import {
-  useGetAllCategoriesQuery,
-  useGetAllVendorsQuery,
-  useGetMainVendorsQuery,
-} from "redux/api/admin";
+import { useGetDashboardAnalyticsQuery } from "redux/api/admin";
 import { Link } from "react-router-dom";
 const Dashboard = () => {
-  const { data: category, isLoading: loading } = useGetAllCategoriesQuery();
-  const { data: vendors, isLoading } = useGetMainVendorsQuery();
-  const { data: vendor, isLoading: load } = useGetAllVendorsQuery();
+  const { data, isLoading } = useGetDashboardAnalyticsQuery();
 
-  if (loading || load || isLoading) return <Skeletons />;
+  if (isLoading) return <Skeletons />;
+  const {
+    allLocalVendors,
+    allUsers,
+    totalFundedAmount,
+    totalFundedItems,
+    no_of_unique_wishlist,
+  } = data;
   const arr = [
     {
       name: "Total Users",
-      value: vendor?.total || 0,
-      link: "/#",
+      value: allUsers || 0,
+      link: "/users",
     },
     {
       name: "Global Vendor",
-      value: vendor?.total || 0,
+      value: 0,
       link: "/global-vendors",
     },
     {
       name: "Local Vendor",
-      value: vendor?.total || 0,
-      link: "/#",
+      value: allLocalVendors || 0,
+      link: "/vendors",
     },
     {
       name: "Total Funded",
-      value: category?.length || 0,
+      value: totalFundedAmount || 0,
+      link: "/categories",
+    },
+    {
+      name: "Total Funded Items",
+      value: totalFundedItems || 0,
       link: "/categories",
     },
     {
       name: "Wishlisted Item",
-      value: vendors?.length || 0,
-      link: "/vendors",
+      value: no_of_unique_wishlist || 0,
+      link: "/#",
     },
   ];
 

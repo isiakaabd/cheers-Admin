@@ -1,56 +1,48 @@
-import React from "react";
-import { Field, ErrorMessage } from "formik";
-import { TextError } from "components/Utilities/TextError";
-import TextField from "@mui/material/TextField";
-import FormLabel from "@mui/material/FormLabel";
+import { Field, ErrorMessage, useFormikContext } from "formik/dist";
 import PropTypes from "prop-types";
 import { Grid } from "@mui/material";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import { makeStyles } from "@mui/styles";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DesktopDateTimePicker from "@mui/lab/DesktopDateTimePicker";
-const useStyles = makeStyles((theme) => ({
-  FormLabel: {
-    "&.MuiFormLabel-root": {
-      ...theme.typography.FormLabel,
-    },
-  },
-}));
-
-const Dates = ({ name, value, setFieldValue, onBlur }) => {
+import dayjs from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { TextError } from "./TextError";
+function DatePickerViews(props) {
+  const { label, name, ...rest } = props;
+  const { setFieldValue } = useFormikContext();
+  const handleDateChange = (date) => {
+    if (date) {
+      const formattedDate = dayjs(date).format("YYYY-MM-DD");
+      setFieldValue(name, formattedDate);
+    }
+  };
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <DesktopDateTimePicker
-        name={name}
-        onChange={(value) => setFieldValue(name, value)}
-        value={value}
-        onBlur={onBlur}
-        onError={(err) => console.log(err)}
-        renderInput={(params) => (
-          <TextField {...params} sx={{ padding: "-12px" }} />
-        )}
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DatePicker
+        label={label}
+        views={["year", "month", "day"]}
+        {...rest}
+        onChange={handleDateChange}
       />
     </LocalizationProvider>
   );
-};
+}
 
-Dates.propTypes = {
-  value: PropTypes.string,
-  label: PropTypes.string,
-  onChange: PropTypes.func,
-  setFieldValue: PropTypes.func,
-  children: PropTypes.node,
-  name: PropTypes.string,
-  onBlur: PropTypes.func,
+DatePickerViews.propTypes = {
+  label: PropTypes.string.isRequired,
 };
 
 const DateTimePicker = (props) => {
   const { name, label, ...rest } = props;
-  const classes = useStyles();
+
   return (
     <Grid container direction="column" gap={1}>
-      <FormLabel className={classes.FormLabel}>{label}</FormLabel>
-      <Field name={name} as={Dates} label={label} {...rest} />
+      <Field
+        name={name}
+        as={DatePickerViews}
+        label={label}
+        {...rest}
+        type="date"
+      />
       <ErrorMessage name={name} component={TextError} />
     </Grid>
   );
