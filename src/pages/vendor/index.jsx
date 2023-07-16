@@ -1,9 +1,9 @@
 import {
-  BiotechOutlined,
-  BlockRounded,
-  DeleteOutline,
+  // BiotechOutlined,
+  // BlockRounded,
+  // DeleteOutline,
   MoreHorizOutlined,
-  ResetTvRounded,
+  // ResetTvRounded,
   ToggleOffOutlined,
   ToggleOnOutlined,
   VerifiedOutlined,
@@ -26,30 +26,50 @@ import EmptyCell from "components/EmptyTable";
 import BasicMenu from "components/MenuComponent";
 import BasicTable from "components/Table";
 import { Formik, Form } from "formik/dist";
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import {
-  useGetMainVendorsQuery,
+  useLazyGetMainVendorsQuery,
+  useLazySearchVendorQuery,
   useToggleVendorMutation,
 } from "redux/api/admin";
 import { getDate } from "utilis";
 import FormikControl from "validation/FormikControl";
 
 const Vendors = () => {
-  const { data: vendors, isLoading, isFetching } = useGetMainVendorsQuery();
+  const [state, setState] = useState([]);
+  const [getAllVendors, { data: vendors, isLoading }] =
+    useLazyGetMainVendorsQuery();
+  const [searchVendor, { isLoading: loading }] = useLazySearchVendorQuery();
 
+  useEffect(() => {
+    getAllVendors();
+    if (vendors) {
+      setState(vendors);
+    }
+    //eslint-disable-next-line
+  }, [vendors]);
   const headcells = [
     "Name",
     "Phone",
     "Store Name",
-    " Address",
+    "Address",
     "Email",
     "Date Joined",
     "Status",
     "",
   ];
   if (isLoading) return <Skeletons />;
-  const onSubmit = () => {};
+  const onSubmit = async (values) => {
+    if (!values.search) {
+      setState(vendors);
+    } else {
+      const { data } = await searchVendor({ search: values.search });
+      if (data) {
+        setState(data);
+      }
+    }
+  };
   return (
     <Grid item container flexDirection="column">
       <Grid
@@ -74,7 +94,7 @@ const Vendors = () => {
                   <CustomButton
                     title="Search"
                     type="submit"
-                    disabled={isFetching}
+                    disabled={loading}
                   />
                 </Grid>
               </Grid>
@@ -82,37 +102,41 @@ const Vendors = () => {
           </Formik>
         </Grid>
       </Grid>
-      <Card sx={{ width: "100%" }}>
-        {vendors?.length > 0 ? (
-          <Grid
-            item
-            container
-            direction="column"
-            overflow="hidden"
-            sx={{ mt: 2 }}
-            maxWidth={{ md: "100%", sm: "100%", xs: "100%" }}
-          >
-            <BasicTable
-              tableHead={headcells}
-              rows={vendors}
-              paginationLabel="vendors per page"
-              hasCheckbox={false}
-              per_page={vendors?.per_page}
-              totalPage={vendors?.to}
-              nextPageUrl={vendors?.next_page_url}
+      {!loading ? (
+        <Card sx={{ width: "100%" }}>
+          {state.length > 0 ? (
+            <Grid
+              item
+              container
+              direction="column"
+              overflow="hidden"
+              sx={{ mt: 2 }}
+              maxWidth={{ md: "100%", sm: "100%", xs: "100%" }}
             >
-              {vendors?.map((row) => (
-                <Rows key={row.id} row={row} />
-              ))}
-            </BasicTable>
-          </Grid>
-        ) : (
-          <EmptyCell
-            paginationLabel="Availability  per page"
-            headCells={headcells}
-          />
-        )}
-      </Card>
+              <BasicTable
+                tableHead={headcells}
+                rows={state}
+                paginationLabel="vendors per page"
+                hasCheckbox={false}
+                per_page={vendors?.per_page}
+                totalPage={vendors?.to}
+                nextPageUrl={vendors?.next_page_url}
+              >
+                {state?.map((row) => (
+                  <Rows key={row.id} row={row} />
+                ))}
+              </BasicTable>
+            </Grid>
+          ) : (
+            <EmptyCell
+              paginationLabel="Availability  per page"
+              headCells={headcells}
+            />
+          )}
+        </Card>
+      ) : (
+        <Skeletons />
+      )}
     </Grid>
   );
 };
@@ -124,6 +148,9 @@ function Rows({ row }) {
     profile_picture,
     name,
     vendor_name,
+    is_active,
+    email,
+    address,
     first_name,
     last_name,
     is_closed,
@@ -135,7 +162,15 @@ function Rows({ row }) {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  // const handleMultipleAction = async (action) => {
+  //   try {
+  //     const data = await action({ user_id: id });
 
+  //     toast.success(data?.data);
+  //   } catch (e) {
+  //     toast.error(e.message);
+  //   }
+  // };
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -147,9 +182,7 @@ function Rows({ row }) {
     }
     if (error) toast.error(error);
   };
-  const handleDelete = async () => {
-    setTimeout(() => handleClose(), 1000);
-  };
+
   return (
     <TableRow tabIndex={-1} sx={{ cursor: "pointer" }}>
       <TableCell scope="row" align="left">
@@ -165,10 +198,13 @@ function Rows({ row }) {
         {name}
       </TableCell>
       <TableCell align="left">{phone}</TableCell>
-      <TableCell align="left">{vendor_name || "No Store Name"}</TableCell>
+      <TableCell align="left">{vendor_name || "NA"}</TableCell>
+      <TableCell align="left">{address ? address : "NA"}</TableCell>
+      <TableCell align="left">{email}</TableCell>
       <TableCell align="left">{getDate(created_at)}</TableCell>
-      <TableCell align="left">{getDate(created_at)}</TableCell>
-      <TableCell align="left">{getDate(created_at)}</TableCell>
+      <TableCell align="left">
+        {Boolean(is_active) ? "Active" : "Inactive"}
+      </TableCell>
       <TableCell align="left">
         <IconButton
           id="basic-button"
@@ -187,34 +223,28 @@ function Rows({ row }) {
           handleClick={handleClick}
           handleClose={handleClose}
         >
-          <MenuItem>
+          {/* <MenuItem onClick={() => handleMultipleAction(deleteUser)}>
             <ListItemIcon>
               <ResetTvRounded fontSize="large" />
             </ListItemIcon>
 
             <ListItemText>{"Reset Password"}</ListItemText>
-          </MenuItem>
-          <MenuItem onClick={handleDelete}>
+          </MenuItem> */}
+          {/* <MenuItem onClick={handleDelete}>
             <ListItemIcon>
               <DeleteOutline fontSize="large" />
             </ListItemIcon>
 
             <ListItemText>{"Delete User"}</ListItemText>
-          </MenuItem>
-          <MenuItem onClick={handleDelete}>
-            <ListItemIcon>
-              <BlockRounded fontSize="large" />
-            </ListItemIcon>
+          </MenuItem> */}
 
-            <ListItemText>{"Block User"}</ListItemText>
-          </MenuItem>
-          <MenuItem onClick={handleDelete}>
+          {/* <MenuItem onClick={handleDelete}>
             <ListItemIcon>
               <BiotechOutlined fontSize="large" />
             </ListItemIcon>
 
             <ListItemText>{"CHange User's Birthday"}</ListItemText>
-          </MenuItem>
+          </MenuItem> */}
           <MenuItem onClick={handleToggle}>
             <ListItemIcon>
               {is_closed ? (

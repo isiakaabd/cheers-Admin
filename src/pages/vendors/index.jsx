@@ -17,10 +17,10 @@ import {
 import Dialogs from "components/Dialog";
 import EmptyCell from "components/EmptyTable";
 import BasicTable from "components/Table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useDeleteAvendorMutation,
-  useGetAllVendorsQuery,
+  useLazyGetAllGlobalVendorsQuery,
 } from "redux/api/admin";
 import { getTimeMoment } from "utilis";
 import CreateGlobalVendor from "./component";
@@ -28,15 +28,20 @@ import BasicMenu from "components/MenuComponent";
 import { toast } from "react-toastify";
 
 const Vendor = () => {
-  const {
-    data: vendors,
-    isLoading: loading,
-    isFetching,
-  } = useGetAllVendorsQuery();
+  const [getVendors, { data: vendors, isLoading: loading, isFetching }] =
+    useLazyGetAllGlobalVendorsQuery();
 
+  useEffect(() => {
+    console.log(12);
+    getVendors({ search: "" });
+    //eslint-disable-next-line
+  }, []);
   const [open, setOpen] = useState(false);
-  if (loading) return <Skeletons />;
-  const onSubmit = () => {};
+  // if (loading) return <Skeletons />;
+  console.log(vendors);
+  const onSubmit = (values) => {
+    getVendors({ search: values.search });
+  };
   const headcells = ["Name", "Link", "Created At", "Delete"];
   return (
     <>
@@ -80,37 +85,41 @@ const Vendor = () => {
           </Grid>
         </Grid>
 
-        <Card sx={{ width: "100%" }}>
-          {vendors?.data?.length > 0 ? (
-            <Grid
-              item
-              container
-              direction="column"
-              overflow="hidden"
-              sx={{ mt: 2 }}
-              maxWidth={{ md: "100%", sm: "100%", xs: "100%" }}
-            >
-              <BasicTable
-                tableHead={headcells}
-                rows={vendors}
-                paginationLabel="vendors per page"
-                hasCheckbox={false}
-                per_page={vendors?.per_page}
-                totalPage={vendors?.to}
-                nextPageUrl={vendors?.next_page_url}
+        {loading || isFetching ? (
+          <Skeletons />
+        ) : (
+          <Card sx={{ width: "100%" }}>
+            {vendors?.data?.length > 0 || vendors?.length ? (
+              <Grid
+                item
+                container
+                direction="column"
+                overflow="hidden"
+                sx={{ mt: 2 }}
+                maxWidth={{ md: "100%", sm: "100%", xs: "100%" }}
               >
-                {vendors?.data?.map((row) => (
-                  <Rows key={row.id} row={row} />
-                ))}
-              </BasicTable>
-            </Grid>
-          ) : (
-            <EmptyCell
-              paginationLabel="Availability  per page"
-              headCells={headcells}
-            />
-          )}
-        </Card>
+                <BasicTable
+                  tableHead={headcells}
+                  rows={vendors || vendors?.data}
+                  paginationLabel="vendors per page"
+                  hasCheckbox={false}
+                  per_page={vendors?.per_page}
+                  totalPage={vendors?.to}
+                  nextPageUrl={vendors?.next_page_url}
+                >
+                  {vendors?.data
+                    ? vendors.data.map((row) => <Rows key={row.id} row={row} />)
+                    : vendors.map((row) => <Rows key={row.id} row={row} />)}
+                </BasicTable>
+              </Grid>
+            ) : (
+              <EmptyCell
+                paginationLabel="Availability  per page"
+                headCells={headcells}
+              />
+            )}
+          </Card>
+        )}
       </Grid>
 
       <Dialogs

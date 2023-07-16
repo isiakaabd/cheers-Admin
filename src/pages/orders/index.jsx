@@ -29,14 +29,14 @@ import { Formik, Form } from "formik/dist";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import {
-  useGetMainVendorsQuery,
+  useGetGlobalOrdersQuery,
   useToggleVendorMutation,
 } from "redux/api/admin";
 import { getDate } from "utilis";
 import FormikControl from "validation/FormikControl";
 
 const Orders = () => {
-  const { data: vendors, isLoading, isFetching } = useGetMainVendorsQuery();
+  const { data: orders, isLoading, isFetching } = useGetGlobalOrdersQuery();
 
   const headcells = [
     "Name",
@@ -50,6 +50,7 @@ const Orders = () => {
     "Status",
   ];
   if (isLoading) return <Skeletons />;
+
   const onSubmit = () => {};
   return (
     <Grid item container flexDirection="column">
@@ -84,7 +85,7 @@ const Orders = () => {
         </Grid>
       </Grid>
       <Card sx={{ width: "100%" }}>
-        {vendors?.length > 0 ? (
+        {orders?.length > 0 ? (
           <Grid
             item
             container
@@ -95,14 +96,14 @@ const Orders = () => {
           >
             <BasicTable
               tableHead={headcells}
-              rows={vendors}
+              rows={orders}
               paginationLabel="vendors per page"
               hasCheckbox={false}
-              per_page={vendors?.per_page}
-              totalPage={vendors?.to}
-              nextPageUrl={vendors?.next_page_url}
+              per_page={orders?.per_page}
+              totalPage={orders?.to}
+              nextPageUrl={orders?.next_page_url}
             >
-              {vendors?.map((row) => (
+              {orders?.map((row) => (
                 <Rows key={row.id} row={row} />
               ))}
             </BasicTable>

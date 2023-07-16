@@ -2,9 +2,9 @@ import { api } from "./api";
 
 export const adminSlice = api.injectEndpoints({
   endpoints: (builder) => ({
-    getAllVendors: builder.query({
-      query: () => ({
-        url: "/global-vendors",
+    getAllGlobalVendors: builder.query({
+      query: ({ search }) => ({
+        url: `/global-vendors${search && `/search?search=${search}`}`,
       }),
       providesTags: ["vendors"],
       transformResponse: (response) => response.data,
@@ -48,6 +48,28 @@ export const adminSlice = api.injectEndpoints({
       transformResponse: (response) => response.data,
       providesTags: ["users"],
     }),
+    getGlobalOrders: builder.query({
+      query: () => ({
+        url: `/get-global-orders`,
+      }),
+      transformResponse: (response) => response.data,
+      providesTags: ["orders"],
+    }),
+    getLocalOrders: builder.query({
+      query: () => ({
+        url: `/get-local-orders`,
+      }),
+      transformResponse: (response) => response.data,
+      providesTags: ["orders"],
+    }),
+    searchVendor: builder.query({
+      query: ({ search }) => ({
+        url: `/search-vendors?search=${search}`,
+      }),
+      transformResponse: (response) => response.data,
+      providesTags: ["users"],
+    }),
+
     deleteUserAccount: builder.mutation({
       query: (body) => ({
         url: `/delete-user`,
@@ -135,20 +157,26 @@ export const adminSlice = api.injectEndpoints({
   }),
 });
 export const {
-  useGetAllVendorsQuery,
+  useGetAllGlobalVendorsQuery,
+  useLazyGetAllGlobalVendorsQuery,
   useGetAllCategoriesQuery,
   useCreateVendorMutation,
   useDeleteAvendorMutation,
+  useSearchVendorQuery,
+  useLazySearchVendorQuery,
   useActivateOrDeactivateVendorMutation,
   useGetCategoryQuery,
   useChangeBirthdayMutation,
   useDeleteCategoryMutation,
   useGetAllUsersQuery,
   useGetMainVendorsQuery,
+  useLazyGetMainVendorsQuery,
   useCreateCategoryMutation,
+  useGetGlobalOrdersQuery,
   useToggleVendorMutation,
   useDeleteUserAccountMutation,
   useUpdateCategoryMutation,
   useGetDashboardAnalyticsQuery,
   useBlockUserMutation,
+  useGetLocalOrdersQuery,
 } = adminSlice;
