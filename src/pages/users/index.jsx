@@ -156,17 +156,32 @@ function Rows({ row }) {
     if (error) toast.error(error);
     setTimeout(() => handleCloseModal(), 300);
   };
+  const overflow = {
+    maxWidth: "20rem",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  };
+
   return (
     <>
       <TableRow tabIndex={-1} sx={{ cursor: "pointer" }}>
-        <TableCell scope="row" align="left">
+        <TableCell
+          scope="row"
+          align="left"
+          sx={overflow}
+          title={`${first_name} ${last_name}`}
+        >
           {first_name} {last_name}
         </TableCell>
         <TableCell align="left">{username}</TableCell>
         <TableCell align="left">{formatedDate(date_of_birth)}</TableCell>
-        {/* <TableCell align="left">{friends_no}</TableCell> */}
-        <TableCell align="left">{email}</TableCell>
-        <TableCell align="left">{phone}</TableCell>
+        <TableCell align="left" sx={overflow} title={email}>
+          {email}
+        </TableCell>
+        <TableCell align="left" sx={overflow}>
+          {phone}
+        </TableCell>
         <TableCell align="left">{getTimeMoment(created_at)}</TableCell>
         <TableCell align="left">
           <IconButton

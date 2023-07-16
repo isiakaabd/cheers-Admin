@@ -514,8 +514,10 @@ export default function MiniDrawer() {
           p: 3,
           height: "100%",
           width: "100%",
+          maxWidth: "100%",
           background: "#eff2f5",
           display: "flex",
+          overflowX: "hidden",
           minHeight: "100vh",
           flexDirection: "column",
         }}

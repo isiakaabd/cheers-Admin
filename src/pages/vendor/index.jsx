@@ -182,6 +182,12 @@ function Rows({ row }) {
     }
     if (error) toast.error(error);
   };
+  const overflow = {
+    maxWidth: "20rem",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  };
 
   return (
     <TableRow tabIndex={-1} sx={{ cursor: "pointer" }}>
@@ -191,7 +197,10 @@ function Rows({ row }) {
             {first_name?.slice(0, 1).toUpperCase()}
           </Avatar>
           <Grid item container alignItems="center" gap={1} flexWrap="nowrap">
-            <Typography>{`${first_name} ${last_name}`}</Typography>
+            <Typography
+              sx={[overflow, { maxWidth: "15rem" }]}
+              title={`${first_name} ${last_name}`}
+            >{`${first_name} ${last_name}`}</Typography>
             {Boolean(is_closed) && <VerifiedOutlined sx={{ color: "green" }} />}
           </Grid>
         </Grid>
@@ -200,7 +209,9 @@ function Rows({ row }) {
       <TableCell align="left">{phone}</TableCell>
       <TableCell align="left">{vendor_name || "NA"}</TableCell>
       <TableCell align="left">{address ? address : "NA"}</TableCell>
-      <TableCell align="left">{email}</TableCell>
+      <TableCell align="left" sx={overflow} title={email}>
+        {email}
+      </TableCell>
       <TableCell align="left">{getDate(created_at)}</TableCell>
       <TableCell align="left">
         {Boolean(is_active) ? "Active" : "Inactive"}

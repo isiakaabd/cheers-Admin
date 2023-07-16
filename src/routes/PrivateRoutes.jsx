@@ -1,5 +1,4 @@
 import { Route, Routes, Navigate } from "react-router-dom";
-// import Inventories from "pages/inventory";
 import MiniDrawer from "pages/Drawer";
 import Vendor from "pages/vendors";
 import Vendors from "pages/vendor";
@@ -15,22 +14,6 @@ import AllMessages from "pages/message-center/AllMessages";
 import Message from "pages/message-center/Message";
 
 const PrivateRoutes = () => {
-  //   const BuilderPageWrapper = lazy(() =>
-  //     import("../pages/layout-builder/BuilderPageWrapper")
-  //   );
-  //   const ProfilePage = lazy(() => import("../modules/profile/ProfilePage"));
-  //   const WizardsPage = lazy(() => import("../modules/wizards/WizardsPage"));
-  //   const AccountPage = lazy(() => import("../modules/accounts/AccountPage"));
-  //   const WidgetsPage = lazy(() => import("../modules/widgets/WidgetsPage"));
-  //   const ChatPage = lazy(() => import("../modules/apps/chat/ChatPage"));
-  //   const UsersPage = lazy(() =>
-  //     import("../modules/apps/user-management/UsersPage")
-  //   );
-
-  // useEffect(() => {
-  //   actionFetchUserProfile()
-  // }, [actionFetchUserProfile])
-
   return (
     <Routes>
       <Route element={<MiniDrawer />}>
@@ -48,24 +31,9 @@ const PrivateRoutes = () => {
         <Route path="categories" element={<Categories />} />
         <Route path="categories/:id" element={<SingleCategory />} />
         <Route path="account" element={<Profile />} />
-
-        {/* <Route index element={<Inventories />} /> */}
-        {/* <Route path="*" element={<Navigate to="/error/404" />} /> */}
       </Route>
     </Routes>
   );
 };
-
-// const SuspensedView: FC<{ children?: ReactNode }> = ({ children }) => {
-//   const baseColor = getCSSVariableValue("--bs-primary");
-//   TopBarProgress.config({
-//     barColors: {
-//       0: baseColor,
-//     },
-//     barThickness: 1,
-//     shadowBlur: 5,
-//   });
-//   return <Suspense fallback={<TopBarProgress />}>{children}</Suspense>;
-// };
 
 export default PrivateRoutes;

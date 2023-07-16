@@ -25,6 +25,7 @@ const LocalOrders = () => {
     "Settlement",
   ];
   if (isLoading) return <Skeletons />;
+
   return (
     <Grid item container flexDirection="column">
       <Grid
@@ -94,7 +95,12 @@ const LocalOrders = () => {
 
 function Rows({ row, hasCheckbox }) {
   const { status, name, order_id, price, vendor_name, user, settlement } = row;
-
+  const overflow = {
+    maxWidth: "20rem",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  };
   return (
     <TableRow tabIndex={-1} sx={{ cursor: "pointer" }}>
       {hasCheckbox && (
@@ -113,13 +119,21 @@ function Rows({ row, hasCheckbox }) {
 
       <TableCell scope="row" align="left">
         <Grid item container alignItems="center" gap={1} flexWrap="nowrap">
-          <Typography>{`${user?.first_name} ${user.last_name}`}</Typography>
+          <Typography
+            sx={overflow}
+          >{`${user?.first_name} ${user.last_name}`}</Typography>
         </Grid>
         {name}
       </TableCell>
-      <TableCell align="left">{user?.phone}</TableCell>
-      <TableCell align="left">{vendor_name || "No Store Name"}</TableCell>
-      <TableCell align="left">{order_id}</TableCell>
+      <TableCell align="left" sx={overflow}>
+        {user?.phone}
+      </TableCell>
+      <TableCell align="left" sx={overflow}>
+        {vendor_name || "No Store Name"}
+      </TableCell>
+      <TableCell align="left" sx={overflow}>
+        {order_id}
+      </TableCell>
       <TableCell align="left">{price ? price : "NA"}</TableCell>
       <TableCell align="left">
         <Chip

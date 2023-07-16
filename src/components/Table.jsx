@@ -141,7 +141,7 @@ export default function BasicTable({
         hasCheckbox={hasCheckbox}
       />
       <TableContainer component={Paper} sx={{ width: "100%" }}>
-        <Table sx={{ width: "100%" }} aria-label="table">
+        <Table aria-label="table">
           <TableHead>
             <TableRow>
               {hasCheckbox && (
