@@ -18,7 +18,6 @@ const PrivateRoutes = () => {
     <Routes>
       <Route element={<MiniDrawer />}>
         <Route path="auth/*" element={<Navigate to="/dashboard" />} />
-
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="users" element={<Users />} />
         <Route path="messages" element={<AllMessages />} />

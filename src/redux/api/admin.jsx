@@ -10,6 +10,7 @@ export const adminSlice = api.injectEndpoints({
       transformResponse: (response) => response.data,
       transformErrorResponse: (error) => error.message,
     }),
+
     getAllCategories: builder.query({
       query: () => ({
         url: "/categories",
@@ -33,6 +34,14 @@ export const adminSlice = api.injectEndpoints({
         body,
       }),
       invalidatesTags: ["vendors"],
+    }),
+    resetUserPassword: builder.mutation({
+      query: (body) => ({
+        url: `/change-user-password`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["users"],
     }),
     getCategory: builder.query({
       query: (categoryId) => ({
@@ -80,6 +89,16 @@ export const adminSlice = api.injectEndpoints({
       transformErrorResponse: (response) => response.data.message,
       invalidatesTags: ["users", "user"],
     }),
+    updateGlobalVendor: builder.mutation({
+      query: ({ body, id }) => ({
+        url: `global-vendors/update/${id}`,
+        method: "POST",
+        body,
+      }),
+      transformResponse: (response) => response.data,
+      transformErrorResponse: (response) => response.data.message,
+      invalidatesTags: ["vendors"],
+    }),
     changeBirthday: builder.mutation({
       query: (body) => ({
         url: `/change-birthdate`,
@@ -121,6 +140,14 @@ export const adminSlice = api.injectEndpoints({
       }),
       invalidatesTags: ["vendor"],
     }),
+    resetVendorPassword: builder.mutation({
+      query: (body) => ({
+        url: `/change-vendor-password`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["vendor"],
+    }),
     updateCategory: builder.mutation({
       query: ({ categoryId, x }) => ({
         url: `/categories/${categoryId}`,
@@ -157,6 +184,9 @@ export const adminSlice = api.injectEndpoints({
   }),
 });
 export const {
+  useResetVendorPasswordMutation,
+  useUpdateGlobalVendorMutation,
+  useResetUserPasswordMutation,
   useGetAllGlobalVendorsQuery,
   useLazyGetAllGlobalVendorsQuery,
   useGetAllCategoriesQuery,

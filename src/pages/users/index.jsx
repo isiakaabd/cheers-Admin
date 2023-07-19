@@ -3,8 +3,8 @@ import {
   BlockRounded,
   DeleteOutline,
   MoreHorizOutlined,
-  ResetTvRounded,
 } from "@mui/icons-material";
+import * as Yup from "yup";
 import dayjs from "dayjs";
 import {
   Grid,
@@ -27,6 +27,7 @@ import {
   useChangeBirthdayMutation,
   useDeleteUserAccountMutation,
   useGetAllUsersQuery,
+  useResetUserPasswordMutation,
 } from "redux/api/admin";
 import { formatedDate, getTimeMoment } from "utilis";
 
@@ -41,7 +42,7 @@ const Users = () => {
   const { data: users, isLoading: loading } = useGetAllUsersQuery();
 
   if (loading) return <Skeletons />;
-  console.log(users);
+
   const headcells = [
     "Name",
     "UserName",
@@ -95,22 +96,27 @@ function Rows({ row }) {
     first_name,
     last_name,
     username,
-    // birthday,
-    // friends_no,
     email,
     phone,
     created_at,
     date_of_birth,
     id,
+    is_closed,
   } = row;
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const [isOpen, setIsOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const handleCloseModal = () => setIsOpen(false);
   const [deleteUser, { isLoading: deletingUser }] =
     useDeleteUserAccountMutation();
   const [blockUser, { isLoading: blockingUser }] = useBlockUserMutation();
+  const [resetUserPassword, { isLoading: reseting }] =
+    useResetUserPasswordMutation();
   const [changeBirthday, { isLoading: changingBirthday }] =
     useChangeBirthdayMutation();
-  const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -126,8 +132,6 @@ function Rows({ row }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [isOpen, setIsOpen] = useState(false);
-  const handleCloseModal = () => setIsOpen(false);
 
   const handleOpenModal = () => {
     setIsOpen(true);
@@ -147,6 +151,19 @@ function Rows({ row }) {
 
     return formattedDateString;
   }, []);
+  const handleResetPassword = async (values) => {
+    const { password, password_confirmation } = values;
+    const { data, error } = await resetUserPassword({
+      user_id: id,
+      password,
+      password_confirmation,
+    });
+    if (data) {
+      toast.success(data.message);
+      setTimeout(() => setOpenModal(false), 300);
+    }
+    if (error) toast.error(error.message);
+  };
   const handleChangeBirthDay = async (values) => {
     const { data, error } = await changeBirthday({
       date_of_birth: values.dob,
@@ -162,7 +179,19 @@ function Rows({ row }) {
     overflow: "hidden",
     textOverflow: "ellipsis",
   };
+  const validationSchema = Yup.object().shape({
+    password: Yup.string()
+      .required("Enter your password")
+      .min(8, "password too short")
+      .matches(/^(?=.*[a-z])/, "Must contain at least one lowercase character")
+      .matches(/^(?=.*[A-Z])/, "Must contain at least one uppercase character")
+      .matches(/^(?=.*[0-9])/, "Must contain at least one number")
+      .matches(/^(?=.*[!@#%&])/, "Must contain at least one special character"),
 
+    password_confirmation: Yup.string("Password")
+      .oneOf([Yup.ref("password"), null], "Passwords must match")
+      .required("Password is required"),
+  });
   return (
     <>
       <TableRow tabIndex={-1} sx={{ cursor: "pointer" }}>
@@ -201,13 +230,7 @@ function Rows({ row }) {
             handleClick={handleClick}
             handleClose={handleClose}
           >
-            <MenuItem>
-              <ListItemIcon>
-                <ResetTvRounded fontSize="large" />
-              </ListItemIcon>
-
-              <ListItemText>{"Reset Password"}</ListItemText>
-            </MenuItem>
+            type="password"
             <MenuItem onClick={() => handleMultipleAction(deleteUser)}>
               <ListItemIcon>
                 <DeleteOutline fontSize="large" />
@@ -223,7 +246,11 @@ function Rows({ row }) {
               </ListItemIcon>
 
               <ListItemText>
-                {blockingUser ? "Blocking" : "Block User"}
+                {blockingUser
+                  ? "Blocking"
+                  : Boolean(is_closed)
+                  ? "Unblock"
+                  : "Block User"}
               </ListItemText>
             </MenuItem>
             <MenuItem onClick={handleOpenModal}>
@@ -256,6 +283,44 @@ function Rows({ row }) {
                 title={"Change"}
                 isSubmitting={changingBirthday}
               />
+            </Grid>
+          </Form>
+        </Formik>
+      </Dialogs>
+      <Dialogs isOpen={openModal} handleClose={() => setOpenModal(false)}>
+        <Formik
+          initialValues={{ password: "", password_confirmation: "" }}
+          onSubmit={handleResetPassword}
+          validationSchema={validationSchema}
+        >
+          <Form>
+            <Grid item container py={1} gap={3}>
+              <Grid item container py={1}>
+                <Typography variant="h6" color="secondary" gutterBottom>
+                  Change User Password
+                </Typography>
+              </Grid>
+              <Grid item container>
+                <FormikControl
+                  placeholder="Password"
+                  type="password"
+                  name="password"
+                />
+              </Grid>
+              <Grid item container>
+                <FormikControl
+                  placeholder="Confirm Password"
+                  name="password_confirmation"
+                  type="password"
+                />
+              </Grid>
+              <Grid item container mt={2}>
+                <CustomButton
+                  type="submit"
+                  title={"Reset"}
+                  isSubmitting={reseting}
+                />
+              </Grid>
             </Grid>
           </Form>
         </Formik>

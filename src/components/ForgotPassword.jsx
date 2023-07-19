@@ -13,7 +13,7 @@ const validationSchema = Yup.object().shape({
     .max(50, "Maximum 50 symbols")
     .required("Email is required"),
 });
-const ForgotPassword = (props) => {
+const ForgotPassword = () => {
   const navigate = useNavigate();
   const [forgotPassword, { isLoading: loading }] = useForgotPasswordMutation();
 
@@ -108,7 +108,5 @@ const ForgotPassword = (props) => {
     </Grid>
   );
 };
-
-ForgotPassword.propTypes = {};
 
 export default ForgotPassword;

@@ -3,11 +3,13 @@ import {
   // BlockRounded,
   // DeleteOutline,
   MoreHorizOutlined,
+  ResetTvOutlined,
   // ResetTvRounded,
   ToggleOffOutlined,
   ToggleOnOutlined,
   VerifiedOutlined,
 } from "@mui/icons-material";
+import * as Yup from "yup";
 import {
   Avatar,
   Card,
@@ -22,6 +24,7 @@ import {
   Typography,
 } from "@mui/material";
 import CustomButton from "components/CustomButton";
+import Dialogs from "components/Dialog";
 import EmptyCell from "components/EmptyTable";
 import BasicMenu from "components/MenuComponent";
 import BasicTable from "components/Table";
@@ -31,6 +34,7 @@ import { toast } from "react-toastify";
 import {
   useLazyGetMainVendorsQuery,
   useLazySearchVendorQuery,
+  useResetVendorPasswordMutation,
   useToggleVendorMutation,
 } from "redux/api/admin";
 import { getDate } from "utilis";
@@ -156,24 +160,33 @@ function Rows({ row }) {
     is_closed,
     created_at,
   } = row;
+
   const [toggleVendor, { isLoading: deleting }] = useToggleVendorMutation();
+  const [resetUserPassword, { isLoading: reseting }] =
+    useResetVendorPasswordMutation();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  // const handleMultipleAction = async (action) => {
-  //   try {
-  //     const data = await action({ user_id: id });
+  const validationSchema = Yup.object().shape({
+    password: Yup.string()
+      .required("Enter your password")
+      .min(8, "password too short")
+      .matches(/^(?=.*[a-z])/, "Must contain at least one lowercase character")
+      .matches(/^(?=.*[A-Z])/, "Must contain at least one uppercase character")
+      .matches(/^(?=.*[0-9])/, "Must contain at least one number")
+      .matches(/^(?=.*[!@#%&])/, "Must contain at least one special character"),
 
-  //     toast.success(data?.data);
-  //   } catch (e) {
-  //     toast.error(e.message);
-  //   }
-  // };
+    password_confirmation: Yup.string("Password")
+      .oneOf([Yup.ref("password"), null], "Passwords must match")
+      .required("Password is required"),
+  });
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   const handleToggle = async () => {
     const { error, data } = await toggleVendor({ vendor_id: id });
     if (data) {
@@ -188,60 +201,87 @@ function Rows({ row }) {
     overflow: "hidden",
     textOverflow: "ellipsis",
   };
-
+  const handleResetPassword = async (values) => {
+    const { password, password_confirmation } = values;
+    const { data, error } = await resetUserPassword({
+      vendor_id: id,
+      password,
+      password_confirmation,
+    });
+    if (data) {
+      toast.success(data.message);
+      setTimeout(() => setOpenModal(false), 300);
+    }
+    if (error) toast.error(error.message);
+  };
   return (
-    <TableRow tabIndex={-1} sx={{ cursor: "pointer" }}>
-      <TableCell scope="row" align="left">
-        <Grid item container alignItems="center" gap={1} flexWrap="nowrap">
-          <Avatar src={profile_picture}>
-            {first_name?.slice(0, 1).toUpperCase()}
-          </Avatar>
+    <>
+      <TableRow tabIndex={-1} sx={{ cursor: "pointer" }}>
+        <TableCell scope="row" align="left">
           <Grid item container alignItems="center" gap={1} flexWrap="nowrap">
-            <Typography
-              sx={[overflow, { maxWidth: "15rem" }]}
-              title={`${first_name} ${last_name}`}
-            >{`${first_name} ${last_name}`}</Typography>
-            {Boolean(is_closed) && <VerifiedOutlined sx={{ color: "green" }} />}
+            <Avatar src={profile_picture}>
+              {first_name?.slice(0, 1).toUpperCase()}
+            </Avatar>
+            <Grid item container alignItems="center" gap={1} flexWrap="nowrap">
+              <Typography
+                sx={[overflow, { maxWidth: "15rem" }]}
+                title={`${first_name} ${last_name}`}
+              >{`${first_name} ${last_name}`}</Typography>
+              {Boolean(is_closed) && (
+                <VerifiedOutlined sx={{ color: "green" }} />
+              )}
+            </Grid>
           </Grid>
-        </Grid>
-        {name}
-      </TableCell>
-      <TableCell align="left">{phone}</TableCell>
-      <TableCell align="left">{vendor_name || "NA"}</TableCell>
-      <TableCell align="left">{address ? address : "NA"}</TableCell>
-      <TableCell align="left" sx={overflow} title={email}>
-        {email}
-      </TableCell>
-      <TableCell align="left">{getDate(created_at)}</TableCell>
-      <TableCell align="left">
-        {Boolean(is_active) ? "Active" : "Inactive"}
-      </TableCell>
-      <TableCell align="left">
-        <IconButton
-          id="basic-button"
-          aria-controls={open ? "basic-menu" : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
-          onClick={handleClick}
-        >
-          <MoreHorizOutlined />
-        </IconButton>
+          {name}
+        </TableCell>
+        <TableCell align="left">{phone}</TableCell>
+        <TableCell align="left">{vendor_name || "NA"}</TableCell>
+        <TableCell align="left">{address ? address : "NA"}</TableCell>
+        <TableCell align="left" sx={overflow} title={email}>
+          {email}
+        </TableCell>
+        <TableCell align="left">{getDate(created_at)}</TableCell>
+        <TableCell align="left">
+          {Boolean(is_active) ? "Active" : "Inactive"}
+        </TableCell>
+        <TableCell align="left">
+          <IconButton
+            id="basic-button"
+            aria-controls={open ? "basic-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+            onClick={handleClick}
+          >
+            <MoreHorizOutlined />
+          </IconButton>
 
-        <BasicMenu
-          open={open}
-          anchorEl={anchorEl}
-          setAnchorEl={setAnchorEl}
-          handleClick={handleClick}
-          handleClose={handleClose}
-        >
-          {/* <MenuItem onClick={() => handleMultipleAction(deleteUser)}>
+          <BasicMenu
+            open={open}
+            anchorEl={anchorEl}
+            setAnchorEl={setAnchorEl}
+            handleClick={handleClick}
+            handleClose={handleClose}
+          >
+            <MenuItem
+              onClick={() => {
+                setOpenModal(true);
+                handleClose();
+              }}
+            >
+              <ListItemIcon>
+                <ResetTvOutlined fontSize="large" />
+              </ListItemIcon>
+
+              <ListItemText>{"Reset Password"}</ListItemText>
+            </MenuItem>
+            {/* <MenuItem onClick={() => handleMultipleAction(deleteUser)}>
             <ListItemIcon>
               <ResetTvRounded fontSize="large" />
             </ListItemIcon>
 
             <ListItemText>{"Reset Password"}</ListItemText>
           </MenuItem> */}
-          {/* <MenuItem onClick={handleDelete}>
+            {/* <MenuItem onClick={handleDelete}>
             <ListItemIcon>
               <DeleteOutline fontSize="large" />
             </ListItemIcon>
@@ -249,29 +289,68 @@ function Rows({ row }) {
             <ListItemText>{"Delete User"}</ListItemText>
           </MenuItem> */}
 
-          {/* <MenuItem onClick={handleDelete}>
+            {/* <MenuItem onClick={handleDelete}>
             <ListItemIcon>
               <BiotechOutlined fontSize="large" />
             </ListItemIcon>
 
             <ListItemText>{"CHange User's Birthday"}</ListItemText>
           </MenuItem> */}
-          <MenuItem onClick={handleToggle}>
-            <ListItemIcon>
-              {is_closed ? (
-                <ToggleOnOutlined fontSize="large" sx={{ color: "green" }} />
-              ) : (
-                <ToggleOffOutlined fontSize="large" sx={{ color: "red" }} />
-              )}
-            </ListItemIcon>
+            <MenuItem onClick={handleToggle}>
+              <ListItemIcon>
+                {is_closed ? (
+                  <ToggleOnOutlined fontSize="large" sx={{ color: "green" }} />
+                ) : (
+                  <ToggleOffOutlined fontSize="large" sx={{ color: "red" }} />
+                )}
+              </ListItemIcon>
 
-            <ListItemText>
-              {deleting ? "loading" : is_closed ? "Active" : "InActive"}
-            </ListItemText>
-          </MenuItem>
-        </BasicMenu>
-      </TableCell>
-    </TableRow>
+              <ListItemText>
+                {deleting ? "loading" : is_closed ? "Active" : "InActive"}
+              </ListItemText>
+            </MenuItem>
+          </BasicMenu>
+        </TableCell>
+      </TableRow>
+      <Dialogs isOpen={openModal} handleClose={() => setOpenModal(false)}>
+        <Formik
+          initialValues={{ password: "", password_confirmation: "" }}
+          onSubmit={handleResetPassword}
+          validationSchema={validationSchema}
+        >
+          <Form>
+            <Grid item container py={1} gap={3}>
+              <Grid item container py={1}>
+                <Typography variant="h6" color="secondary" gutterBottom>
+                  Change Vendor Password
+                </Typography>
+              </Grid>
+              <Grid item container>
+                <FormikControl
+                  placeholder="Password"
+                  type="password"
+                  name="password"
+                />
+              </Grid>
+              <Grid item container>
+                <FormikControl
+                  placeholder="Confirm Password"
+                  name="password_confirmation"
+                  type="password"
+                />
+              </Grid>
+              <Grid item container mt={2}>
+                <CustomButton
+                  type="submit"
+                  title={"Reset"}
+                  isSubmitting={reseting}
+                />
+              </Grid>
+            </Grid>
+          </Form>
+        </Formik>
+      </Dialogs>
+    </>
   );
 }
 

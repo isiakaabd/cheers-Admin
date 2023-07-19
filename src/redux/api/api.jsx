@@ -4,12 +4,14 @@ import { getUserDetails, logOut } from "redux/auth/auth.reducers";
 const baseQuery = fetchBaseQuery({
   baseUrl: "https://api.cheers.global/api/admins",
 
-  prepareHeaders: (headers, { getState }) => {
-    //@ts-ignore
+  prepareHeaders: (headers, { getState, endpoint }) => {
     const token = getState().auth.token;
-    headers.append("Content-Type", "application/json");
     headers.append("Accept", "application/json");
-
+    if (endpoint === "updateGlobalVendor") {
+      headers.append("Accept", "multipart/form-data");
+    } else {
+      headers.append("Content-Type", "application/json");
+    }
     if (token) {
       headers.append("AUTHORIZATION", `Bearer ${token}`);
     }
