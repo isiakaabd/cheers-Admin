@@ -200,8 +200,8 @@ const EnhancedTableToolbar = (props) => {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleDelete = async (action) => {};
   const handleClose = () => setAnchorEl(null);
+  const handleDelete = async (action) => {};
   return (
     <Toolbar
       sx={{

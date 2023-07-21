@@ -161,6 +161,7 @@ function Rows({ row }) {
     created_at,
   } = row;
 
+  console.log(row);
   const [toggleVendor, { isLoading: deleting }] = useToggleVendorMutation();
   const [resetUserPassword, { isLoading: reseting }] =
     useResetVendorPasswordMutation();
@@ -236,7 +237,9 @@ function Rows({ row }) {
         </TableCell>
         <TableCell align="left">{phone}</TableCell>
         <TableCell align="left">{vendor_name || "NA"}</TableCell>
-        <TableCell align="left">{address ? address : "NA"}</TableCell>
+        <TableCell align="left">
+          {address ? `${address.city}, ${address.state}` : "NA"}
+        </TableCell>
         <TableCell align="left" sx={overflow} title={email}>
           {email}
         </TableCell>

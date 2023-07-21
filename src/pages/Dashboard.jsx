@@ -5,10 +5,12 @@ const Dashboard = () => {
   const { data, isLoading } = useGetDashboardAnalyticsQuery();
 
   if (isLoading) return <Skeletons />;
+  console.log(data);
   const {
     allLocalVendors,
     allUsers,
     totalFundedAmount,
+    global_vendors,
     totalFundedItems,
     no_of_unique_wishlist,
   } = data;
@@ -20,7 +22,7 @@ const Dashboard = () => {
     },
     {
       name: "Global Vendor",
-      value: 0,
+      value: global_vendors || 0,
       link: "/global-vendors",
     },
     {

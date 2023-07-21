@@ -1,7 +1,6 @@
-import { VerifiedOutlined } from "@mui/icons-material";
 import {
-  Avatar,
   Card,
+  Chip,
   Grid,
   Skeleton,
   TableCell,
@@ -14,21 +13,23 @@ import BasicTable from "components/Table";
 import { Formik, Form } from "formik/dist";
 
 import { useNavigate } from "react-router-dom";
-import { useGetMainVendorsQuery } from "redux/api/admin";
+import { useGetAllSupportsQuery } from "redux/api/admin";
 import { getDate } from "utilis";
 import FormikControl from "validation/FormikControl";
 
 const AllMessages = () => {
-  const { data: vendors, isLoading, isFetching } = useGetMainVendorsQuery();
+  const { data: supports, isLoading, isFetching } = useGetAllSupportsQuery();
 
   const headcells = [
     "Name",
     "Store Name",
-    "Date Joined",
+    "Date Created",
     "No of Messages",
     "No of Responses",
+    "Status",
   ];
   if (isLoading) return <Skeletons />;
+
   const onSubmit = () => {};
   return (
     <Grid item container flexDirection="column">
@@ -63,7 +64,7 @@ const AllMessages = () => {
         </Grid>
       </Grid>
       <Card sx={{ width: "100%" }}>
-        {vendors?.length > 0 ? (
+        {supports?.length > 0 ? (
           <Grid
             item
             container
@@ -74,14 +75,14 @@ const AllMessages = () => {
           >
             <BasicTable
               tableHead={headcells}
-              rows={vendors}
-              paginationLabel="vendors per page"
+              rows={supports}
+              paginationLabel="supports per page"
               hasCheckbox={false}
-              per_page={vendors?.per_page}
-              totalPage={vendors?.to}
-              nextPageUrl={vendors?.next_page_url}
+              per_page={supports?.per_page}
+              totalPage={supports?.to}
+              nextPageUrl={supports?.next_page_url}
             >
-              {vendors?.map((row) => (
+              {supports?.map((row) => (
                 <Rows key={row.id} row={row} />
               ))}
             </BasicTable>
@@ -98,17 +99,7 @@ const AllMessages = () => {
 };
 
 function Rows({ row }) {
-  const {
-    id,
-    phone,
-    profile_picture,
-    name,
-    vendor_name,
-    first_name,
-    last_name,
-    is_closed,
-    created_at,
-  } = row;
+  const { id, vendor_name, first_name, last_name, is_open, created_at } = row;
   const navigate = useNavigate();
 
   return (
@@ -116,24 +107,22 @@ function Rows({ row }) {
       tabIndex={-1}
       sx={{ cursor: "pointer" }}
       hover
-      onClick={() => navigate(`${id}`)}
+      onClick={() => navigate(`${id}`, { state: row })}
     >
       <TableCell scope="row" align="left">
-        <Grid item container alignItems="center" gap={1} flexWrap="nowrap">
-          <Avatar src={profile_picture}>
-            {first_name?.slice(0, 1).toUpperCase()}
-          </Avatar>
-          <Grid item container alignItems="center" gap={1} flexWrap="nowrap">
-            <Typography>{`${first_name} ${last_name}`}</Typography>
-            {Boolean(is_closed) && <VerifiedOutlined sx={{ color: "green" }} />}
-          </Grid>
-        </Grid>
-        {name}
+        <Typography>{`${first_name} ${last_name}`}</Typography>
       </TableCell>
-      <TableCell align="left">{phone}</TableCell>
       <TableCell align="left">{vendor_name || "No Store Name"}</TableCell>
       <TableCell align="left">{getDate(created_at)}</TableCell>
       <TableCell align="left">{getDate(created_at)}</TableCell>
+      <TableCell align="left">{getDate(created_at)}</TableCell>
+      <TableCell align="left">
+        <Chip
+          label={Boolean(is_open) ? "Active" : "Closed"}
+          color={is_open ? "primary" : "success"}
+          sx={{ fontSize: "1.2rem" }}
+        />
+      </TableCell>
     </TableRow>
   );
 }

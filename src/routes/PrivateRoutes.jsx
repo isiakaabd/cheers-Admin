@@ -7,11 +7,12 @@ import Dashboard from "pages/Dashboard";
 import SingleCategory from "pages/categories/SingleCategory";
 import Profile from "pages/profile";
 import Users from "pages/users";
-import MessageCenter from "pages/message-center";
+// import MessageCenter from "pages/message-center";
 import Orders from "pages/orders";
 import LocalOrders from "pages/local-order";
 import AllMessages from "pages/message-center/AllMessages";
 import Message from "pages/message-center/Message";
+import UsersFriend from "pages/users/UsersFriend";
 
 const PrivateRoutes = () => {
   return (
@@ -20,9 +21,10 @@ const PrivateRoutes = () => {
         <Route path="auth/*" element={<Navigate to="/dashboard" />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="users" element={<Users />} />
+        <Route path="users/:id/friends" element={<UsersFriend />} />
         <Route path="messages" element={<AllMessages />} />
-        <Route path="messages/:id" element={<MessageCenter />} />
-        <Route path="messages/:id/:ids" element={<Message />} />
+        <Route path="messages/:id" element={<Message />} />
+        {/* <Route path="messages/:id/:ids" element={<Message />} /> */}
         <Route path="orders" element={<Orders />} />
         <Route path="global-vendors" element={<Vendor />} />
         <Route path="vendors" element={<Vendors />} />

@@ -19,6 +19,25 @@ export const adminSlice = api.injectEndpoints({
       transformResponse: (response) => response.data,
       transformErrorResponse: (error) => error.message,
     }),
+    getAllUserFriends: builder.query({
+      query: (body) => ({
+        url: "/get-all-user-friends",
+        body,
+        method: "GET",
+      }),
+      providesTags: ["users"],
+      transformResponse: (response) => response.data,
+      transformErrorResponse: (error) => error.message,
+    }),
+    getAllSupports: builder.query({
+      query: (body) => ({
+        url: "/support",
+        body,
+      }),
+      providesTags: ["support"],
+      transformResponse: (response) => response.data,
+      transformErrorResponse: (error) => error.message,
+    }),
     deleteAvendor: builder.mutation({
       query: (id) => ({
         url: `global-vendors/${id}`,
@@ -156,6 +175,32 @@ export const adminSlice = api.injectEndpoints({
       }),
       invalidatesTags: ["categories"],
     }),
+    getSupportResponses: builder.mutation({
+      query: (body) => ({
+        url: `/support/get-all-supports-replies`,
+        method: "POST",
+        body,
+      }),
+      providesTags: ["support"],
+      transformResponse: (response) => response.data,
+    }),
+    replySupport: builder.mutation({
+      query: (body) => ({
+        url: `/support/reply-support`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["support"],
+      transformResponse: (response) => response.data,
+    }),
+    changeSupportTicket: builder.mutation({
+      query: (id) => ({
+        url: `/support/change-ticket-status/${id}`,
+        method: "POST",
+      }),
+      invalidatesTags: ["support"],
+      transformResponse: (response) => response.data,
+    }),
     createCategory: builder.mutation({
       query: (body) => ({
         url: `/categories`,
@@ -184,6 +229,11 @@ export const adminSlice = api.injectEndpoints({
   }),
 });
 export const {
+  useGetAllSupportsQuery,
+  useChangeSupportTicketMutation,
+  useReplySupportMutation,
+  useGetSupportResponsesMutation,
+  useGetAllUserFriendsQuery,
   useResetVendorPasswordMutation,
   useUpdateGlobalVendorMutation,
   useResetUserPasswordMutation,

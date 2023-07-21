@@ -1,6 +1,7 @@
 import {
   BiotechOutlined,
   BlockRounded,
+  ChildFriendlyOutlined,
   DeleteOutline,
   MoreHorizOutlined,
 } from "@mui/icons-material";
@@ -37,6 +38,7 @@ import Dialogs from "components/Dialog";
 import { Formik, Form } from "formik/dist";
 import FormikControl from "validation/FormikControl";
 import CustomButton from "components/CustomButton";
+import { useNavigate } from "react-router-dom";
 
 const Users = () => {
   const { data: users, isLoading: loading } = useGetAllUsersQuery();
@@ -192,6 +194,7 @@ function Rows({ row }) {
       .oneOf([Yup.ref("password"), null], "Passwords must match")
       .required("Password is required"),
   });
+  const navigate = useNavigate();
   return (
     <>
       <TableRow tabIndex={-1} sx={{ cursor: "pointer" }}>
@@ -230,7 +233,6 @@ function Rows({ row }) {
             handleClick={handleClick}
             handleClose={handleClose}
           >
-            type="password"
             <MenuItem onClick={() => handleMultipleAction(deleteUser)}>
               <ListItemIcon>
                 <DeleteOutline fontSize="large" />
@@ -239,6 +241,13 @@ function Rows({ row }) {
               <ListItemText>
                 {deletingUser ? "Deleting" : "Delete User"}
               </ListItemText>
+            </MenuItem>
+            <MenuItem onClick={() => navigate(`${id}/friends`)}>
+              <ListItemIcon>
+                <ChildFriendlyOutlined fontSize="large" />
+              </ListItemIcon>
+
+              <ListItemText primary="User's Friends" />
             </MenuItem>
             <MenuItem onClick={() => handleMultipleAction(blockUser)}>
               <ListItemIcon>

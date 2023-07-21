@@ -8,8 +8,8 @@ const Loader = ({ color, size, ...rest }) => {
         size={size ? size : 25}
         // color={color ? color : "primary"}
         thickness={5}
+        sx={{ color: color ? color : "#fff" }}
         {...rest}
-        sx={{ color: "#fff" }}
       />
     </Grid>
   );

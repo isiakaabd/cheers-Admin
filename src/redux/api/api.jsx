@@ -7,7 +7,7 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: (headers, { getState, endpoint }) => {
     const token = getState().auth.token;
     headers.append("Accept", "application/json");
-    if (endpoint === "updateGlobalVendor") {
+    if (endpoint === "updateGlobalVendor" || endpoint === "replySupport") {
       headers.append("Accept", "multipart/form-data");
     } else {
       headers.append("Content-Type", "application/json");
@@ -38,6 +38,14 @@ const baseQuerywithAuth = async (args, api, extraOptions) => {
 export const api = createApi({
   // reducerPath: "api",
   baseQuery: baseQuerywithAuth,
-  tagTypes: ["vendor", "categories", "vendors", "user", "users", "orders"],
+  tagTypes: [
+    "vendor",
+    "categories",
+    "vendors",
+    "support",
+    "user",
+    "users",
+    "orders",
+  ],
   endpoints: () => ({}),
 });
