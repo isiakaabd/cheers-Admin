@@ -54,9 +54,9 @@ const Vendors = () => {
     //eslint-disable-next-line
   }, [vendors]);
   const headcells = [
-    "Name",
+    "Rep Name",
     "Phone",
-    "Store Name",
+    "Vendor Name",
     "Address",
     "Email",
     "Date Joined",

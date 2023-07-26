@@ -17,7 +17,7 @@ const LocalOrders = () => {
 
   const headcells = [
     "Name",
-    "Phone",
+    "Vendor",
     "Item Name",
     "Order No",
     "Price",
@@ -94,7 +94,8 @@ const LocalOrders = () => {
 };
 
 function Rows({ row, hasCheckbox }) {
-  const { status, name, order_id, price, vendor_name, user, settlement } = row;
+  const { status, vendor, order_id, price, vendor_name, user, settlement } =
+    row;
   const overflow = {
     maxWidth: "20rem",
     whiteSpace: "nowrap",
@@ -123,16 +124,17 @@ function Rows({ row, hasCheckbox }) {
             sx={overflow}
           >{`${user?.first_name} ${user.last_name}`}</Typography>
         </Grid>
-        {name}
       </TableCell>
       <TableCell align="left" sx={overflow}>
-        {user?.phone}
+        <Typography
+          sx={overflow}
+        >{`${vendor?.first_name} ${vendor.last_name}`}</Typography>
       </TableCell>
       <TableCell align="left" sx={overflow}>
         {vendor_name || "No Store Name"}
       </TableCell>
       <TableCell align="left" sx={overflow}>
-        {order_id}
+        <Typography sx={overflow}>{order_id}</Typography>
       </TableCell>
       <TableCell align="left">{price ? price : "NA"}</TableCell>
       <TableCell align="left">

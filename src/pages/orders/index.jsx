@@ -1,21 +1,9 @@
+import { MoreHorizOutlined, VerifiedOutlined } from "@mui/icons-material";
 import {
-  BiotechOutlined,
-  BlockRounded,
-  DeleteOutline,
-  MoreHorizOutlined,
-  ResetTvRounded,
-  ToggleOffOutlined,
-  ToggleOnOutlined,
-  VerifiedOutlined,
-} from "@mui/icons-material";
-import {
-  Avatar,
   Card,
+  Chip,
   Grid,
   IconButton,
-  ListItemIcon,
-  ListItemText,
-  MenuItem,
   Skeleton,
   TableCell,
   TableRow,
@@ -23,16 +11,15 @@ import {
 } from "@mui/material";
 import CustomButton from "components/CustomButton";
 import EmptyCell from "components/EmptyTable";
-import BasicMenu from "components/MenuComponent";
+// import BasicMenu from "components/MenuComponent";
 import BasicTable from "components/Table";
 import { Formik, Form } from "formik/dist";
-import React, { useState } from "react";
-import { toast } from "react-toastify";
+import { useState } from "react";
+// import { toast } from "react-toastify";
 import {
   useGetGlobalOrdersQuery,
-  useToggleVendorMutation,
+  // useToggleVendorMutation,
 } from "redux/api/admin";
-import { getDate } from "utilis";
 import FormikControl from "validation/FormikControl";
 
 const Orders = () => {
@@ -40,7 +27,7 @@ const Orders = () => {
 
   const headcells = [
     "Name",
-    "Phone",
+    // "Phone",
     // "Email",
     " Address",
     // "Email",
@@ -48,6 +35,7 @@ const Orders = () => {
     "URL",
     "Price",
     "Status",
+    "",
   ];
   if (isLoading) return <Skeletons />;
 
@@ -120,59 +108,75 @@ const Orders = () => {
 };
 
 function Rows({ row }) {
-  const {
-    id,
-    phone,
-    profile_picture,
-    name,
-    vendor_name,
-    first_name,
-    last_name,
-    is_closed,
-    created_at,
-  } = row;
-  const [toggleVendor, { isLoading: deleting }] = useToggleVendorMutation();
+  const { wishlist, url, user, is_closed, status } = row;
+  // const [toggleVendor, { isLoading: deleting }] = useToggleVendorMutation();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const handleToggle = async () => {
-    const { error, data } = await toggleVendor({ vendor_id: id });
-    if (data) {
-      toast.success(data?.message);
-      setTimeout(() => handleClose(), 1000);
-    }
-    if (error) toast.error(error);
-  };
-  const handleDelete = async () => {
-    setTimeout(() => handleClose(), 1000);
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // };
+  // const handleToggle = async () => {
+  //   const { error, data } = await toggleVendor({ vendor_id: id });
+  //   if (data) {
+  //     toast.success(data?.message);
+  //     setTimeout(() => handleClose(), 1000);
+  //   }
+  //   if (error) toast.error(error);
+  // };
+  // const handleDelete = async () => {
+  //   setTimeout(() => handleClose(), 1000);
+  // };
+  const overflow = {
+    maxWidth: "25rem",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
   };
   return (
     <TableRow tabIndex={-1} sx={{ cursor: "pointer" }}>
       <TableCell scope="row" align="left">
         <Grid item container alignItems="center" gap={1} flexWrap="nowrap">
-          <Avatar src={profile_picture}>
-            {first_name?.slice(0, 1).toUpperCase()}
-          </Avatar>
           <Grid item container alignItems="center" gap={1} flexWrap="nowrap">
-            <Typography>{`${first_name} ${last_name}`}</Typography>
+            <Typography>{`${user?.first_name} ${user?.last_name}`}</Typography>
             {Boolean(is_closed) && <VerifiedOutlined sx={{ color: "green" }} />}
           </Grid>
         </Grid>
-        {name}
       </TableCell>
-      <TableCell align="left">{phone}</TableCell>
-      <TableCell align="left">{vendor_name || "No Store Name"}</TableCell>
-      <TableCell align="left">{getDate(created_at)}</TableCell>
+      {/* <TableCell align="left">{phone}</TableCell> */}
+      <TableCell align="left">
+        <Typography sx={overflow}>
+          {user?.address?.street
+            ? `${user?.address?.street} ${user?.address?.street}`
+            : "NA"}
+        </Typography>
+      </TableCell>
+      <TableCell align="left">
+        {wishlist?.product?.name ? wishlist?.product?.name : "NA"}
+      </TableCell>
       {/* <TableCell align="left">{getDate(created_at)}</TableCell> */}
       {/* <TableCell align="left">{getDate(created_at)}</TableCell> */}
-      <TableCell align="left">{getDate(created_at)}</TableCell>
-      <TableCell align="left">{getDate(created_at)}</TableCell>
+      <TableCell align="left">
+        {url ? (
+          <a href={url} rel="noreferrer" target="_blank">
+            Link
+          </a>
+        ) : (
+          "NA"
+        )}
+      </TableCell>
+      <TableCell align="left">
+        {wishlist?.product?.price ? wishlist?.product?.price : "NA"}
+      </TableCell>
+      <TableCell align="left">
+        <Chip
+          label={status}
+          color={status === "pending" ? "warning" : "success"}
+        />
+      </TableCell>
       <TableCell align="left">
         <IconButton
           id="basic-button"
@@ -184,7 +188,7 @@ function Rows({ row }) {
           <MoreHorizOutlined />
         </IconButton>
 
-        <BasicMenu
+        {/* <BasicMenu
           open={open}
           anchorEl={anchorEl}
           setAnchorEl={setAnchorEl}
@@ -232,7 +236,7 @@ function Rows({ row }) {
               {deleting ? "loading" : is_closed ? "Active" : "InActive"}
             </ListItemText>
           </MenuItem>
-        </BasicMenu>
+        </BasicMenu> */}
       </TableCell>
     </TableRow>
   );

@@ -38,7 +38,6 @@ const Message = () => {
   const [anchorEls, setAnchorEls] = useState(null);
   const [index, setIndex] = useState(0);
   const [images, setImages] = useState([]);
-  console.log(images);
   const open = Boolean(anchorEl);
   const opens = Boolean(anchorEls);
   const [isViewerVisible, setIsViewerVisible] = useState(false);

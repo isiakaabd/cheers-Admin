@@ -277,15 +277,15 @@ export default function MiniDrawer() {
 
     {
       id: 1,
-      name: "Global Vendors",
-      link: "/global-vendors",
-      icon: PersonAddAlt1Outlined,
-    },
-    {
-      id: 2,
       name: "Users",
       link: "/users",
       icon: PersonAddAltOutlined,
+    },
+    {
+      id: 2,
+      name: "Global Vendors",
+      link: "/global-vendors",
+      icon: PersonAddAlt1Outlined,
     },
     {
       id: 3,
@@ -300,23 +300,18 @@ export default function MiniDrawer() {
       icon: CarRentalOutlined,
     },
     {
-      id: 4,
+      id: 5,
       name: "Local Orders",
       link: "/local-orders",
       icon: HouseOutlined,
     },
     {
-      id: 5,
+      id: 6,
       name: "Categories",
       link: "/categories",
       icon: CommuteOutlined,
     },
-    // {
-    //   id: 6,
-    //   name: "Accounts",
-    //   link: "/account",
-    //   icon: SettingsOutlined,
-    // },
+
     {
       id: 7,
       name: "Message Center",

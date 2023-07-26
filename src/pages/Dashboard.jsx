@@ -33,17 +33,17 @@ const Dashboard = () => {
     {
       name: "Total Funded",
       value: totalFundedAmount || 0,
-      link: "/categories",
+      link: "#",
     },
     {
       name: "Total Funded Items",
       value: totalFundedItems || 0,
-      link: "/categories",
+      link: "#",
     },
     {
       name: "Wishlisted Item",
       value: no_of_unique_wishlist || 0,
-      link: "/#",
+      link: "#",
     },
   ];
 
@@ -70,7 +70,7 @@ const Dashboard = () => {
             <Typography variant="h4" color="primary" fontWeight={700}>
               {item.name}
             </Typography>
-            <Typography variant="h4" sx={{ color: "#e4e6ef" }}>
+            <Typography variant="h4" sx={{ color: "#333" }}>
               {item.value}
             </Typography>
           </Card>

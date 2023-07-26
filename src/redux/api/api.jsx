@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getUserDetails, logOut } from "redux/auth/auth.reducers";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://api.cheers.global/api/admins",
+  baseUrl: process.env.REACT_APP_BASE_URL,
 
   prepareHeaders: (headers, { getState, endpoint }) => {
     const token = getState().auth.token;
