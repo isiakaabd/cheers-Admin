@@ -245,7 +245,7 @@ function Rows({ row }) {
         </TableCell>
         <TableCell align="left">{getDate(created_at)}</TableCell>
         <TableCell align="left">
-          {Boolean(is_active) ? "Active" : "Inactive"}
+          {Boolean(is_closed) ? "Active" : "Inactive"}
         </TableCell>
         <TableCell align="left">
           <IconButton
