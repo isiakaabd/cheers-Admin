@@ -104,24 +104,21 @@ export default function BasicTable({
   selected,
   setSelected,
   hasCheckbox,
-  per_page,
-  totalPage,
-  nextPageUrl,
+  rowsPerPage,
+  page,
+  setPage,
+  setRowsPerPage,
 }) {
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(per_page);
-
   // Avoid a layout jump when reaching the last page with empty rows.
   // const emptyRows =
   //   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   const handleChangePage = async (event, newPage) => {
     setPage(newPage);
-    await nextPageUrl;
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, per_page));
+    setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
   const handleSelectAllClick = (event) => {
@@ -165,9 +162,9 @@ export default function BasicTable({
           <TableFooter>
             <TableRow>
               <TablePagination
-                rowsPerPageOptions={[15, 30, 45, { label: "All", value: -1 }]}
+                rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={3}
-                count={totalPage}
+                count={rows.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{

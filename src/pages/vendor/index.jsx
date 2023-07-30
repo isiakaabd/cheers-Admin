@@ -13,6 +13,7 @@ import * as Yup from "yup";
 import {
   Avatar,
   Card,
+  Chip,
   Grid,
   IconButton,
   ListItemIcon,
@@ -39,6 +40,7 @@ import {
 } from "redux/api/admin";
 import { getDate } from "utilis";
 import FormikControl from "validation/FormikControl";
+import { StaticDateTimePicker } from "@mui/x-date-pickers";
 
 const Vendors = () => {
   const [state, setState] = useState([]);
@@ -57,12 +59,14 @@ const Vendors = () => {
     "Rep Name",
     "Phone",
     "Vendor Name",
-    "Address",
+    // "Address",
     "Email",
     "Date Joined",
     "Status",
     "",
   ];
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(0);
   if (isLoading) return <Skeletons />;
   const onSubmit = async (values) => {
     if (!values.search) {
@@ -122,11 +126,18 @@ const Vendors = () => {
                 rows={state}
                 paginationLabel="vendors per page"
                 hasCheckbox={false}
-                per_page={vendors?.per_page}
-                totalPage={vendors?.to}
-                nextPageUrl={vendors?.next_page_url}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                setRowsPerPage={setRowsPerPage}
+                setPage={setPage}
               >
-                {state?.map((row) => (
+                {(rowsPerPage > 0
+                  ? state.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : state
+                ).map((row) => (
                   <Rows key={row.id} row={row} />
                 ))}
               </BasicTable>
@@ -152,9 +163,9 @@ function Rows({ row }) {
     profile_picture,
     name,
     vendor_name,
-    is_active,
+    // is_active,
     email,
-    address,
+    // address,
     first_name,
     last_name,
     is_closed,
@@ -215,6 +226,8 @@ function Rows({ row }) {
     }
     if (error) toast.error(error.message);
   };
+  const status = !Boolean(is_closed) ? "Active" : "Inactive";
+
   return (
     <>
       <TableRow tabIndex={-1} sx={{ cursor: "pointer" }}>
@@ -237,15 +250,21 @@ function Rows({ row }) {
         </TableCell>
         <TableCell align="left">{phone}</TableCell>
         <TableCell align="left">{vendor_name || "NA"}</TableCell>
-        <TableCell align="left">
+        {/* <TableCell align="left">
           {address ? `${address.city}, ${address.state}` : "NA"}
-        </TableCell>
+        </TableCell> */}
         <TableCell align="left" sx={overflow} title={email}>
           {email}
         </TableCell>
         <TableCell align="left">{getDate(created_at)}</TableCell>
         <TableCell align="left">
-          {Boolean(is_closed) ? "Active" : "Inactive"}
+          <Chip
+            label={status}
+            sx={{
+              fontSize: "1.2rem",
+            }}
+            color={!Boolean(is_closed) ? "primary" : "secondary"}
+          />
         </TableCell>
         <TableCell align="left">
           <IconButton
@@ -301,7 +320,7 @@ function Rows({ row }) {
           </MenuItem> */}
             <MenuItem onClick={handleToggle}>
               <ListItemIcon>
-                {is_closed ? (
+                {!Boolean(is_closed) ? (
                   <ToggleOnOutlined fontSize="large" sx={{ color: "green" }} />
                 ) : (
                   <ToggleOffOutlined fontSize="large" sx={{ color: "red" }} />
@@ -309,7 +328,11 @@ function Rows({ row }) {
               </ListItemIcon>
 
               <ListItemText>
-                {deleting ? "loading" : is_closed ? "Active" : "InActive"}
+                {deleting
+                  ? "loading"
+                  : !Boolean(is_closed)
+                  ? "Deactivate Account"
+                  : "Activate Account"}
               </ListItemText>
             </MenuItem>
           </BasicMenu>

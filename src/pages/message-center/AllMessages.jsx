@@ -11,6 +11,7 @@ import CustomButton from "components/CustomButton";
 import EmptyCell from "components/EmptyTable";
 import BasicTable from "components/Table";
 import { Formik, Form } from "formik/dist";
+import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { useGetAllSupportsQuery } from "redux/api/admin";
@@ -19,7 +20,7 @@ import FormikControl from "validation/FormikControl";
 
 const AllMessages = () => {
   const { data: supports, isLoading, isFetching } = useGetAllSupportsQuery();
-
+  console.table(supports?.[0], "supportrr");
   const headcells = [
     "Name",
     "Store Name",
@@ -28,6 +29,8 @@ const AllMessages = () => {
     "No of Responses",
     "Status",
   ];
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(0);
   if (isLoading) return <Skeletons />;
 
   const onSubmit = () => {};
@@ -78,11 +81,18 @@ const AllMessages = () => {
               rows={supports}
               paginationLabel="supports per page"
               hasCheckbox={false}
-              per_page={supports?.per_page}
-              totalPage={supports?.to}
-              nextPageUrl={supports?.next_page_url}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              setRowsPerPage={setRowsPerPage}
+              setPage={setPage}
             >
-              {supports?.map((row) => (
+              {(rowsPerPage > 0
+                ? supports.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : supports
+              ).map((row) => (
                 <Rows key={row.id} row={row} />
               ))}
             </BasicTable>
@@ -99,9 +109,18 @@ const AllMessages = () => {
 };
 
 function Rows({ row }) {
-  const { id, vendor_name, first_name, last_name, is_open, created_at } = row;
+  const {
+    id,
+    vendor_name,
+    first_name,
+    is_open,
+    last_name,
+    // is_opn,
+    created_at,
+  } = row;
   const navigate = useNavigate();
-
+  const status = Boolean(is_open) ? "Active" : "Closed";
+  console.log(is_open, status);
   return (
     <TableRow
       tabIndex={-1}
@@ -118,9 +137,11 @@ function Rows({ row }) {
       <TableCell align="left">{getDate(created_at)}</TableCell>
       <TableCell align="left">
         <Chip
-          label={Boolean(is_open) ? "Active" : "Closed"}
-          color={is_open ? "primary" : "success"}
-          sx={{ fontSize: "1.2rem" }}
+          label={status}
+          sx={{
+            fontSize: "1.2rem",
+          }}
+          color={Boolean(is_open) ? "primary" : "secondary"}
         />
       </TableCell>
     </TableRow>

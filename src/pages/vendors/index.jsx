@@ -49,6 +49,8 @@ const Vendor = () => {
   const onSubmit = (values) => {
     getVendors({ search: values.search });
   };
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(0);
   const headcells = ["Name", "Link", "Created At", ""];
   return (
     <>
@@ -107,16 +109,29 @@ const Vendor = () => {
               >
                 <BasicTable
                   tableHead={headcells}
-                  rows={vendors || vendors?.data}
+                  rows={vendors.length > 0 ? vendors : vendors?.data}
                   paginationLabel="vendors per page"
                   hasCheckbox={false}
-                  per_page={vendors?.per_page}
-                  totalPage={vendors?.to}
-                  nextPageUrl={vendors?.next_page_url}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  setRowsPerPage={setRowsPerPage}
+                  setPage={setPage}
                 >
                   {vendors?.data
-                    ? vendors.data.map((row) => <Rows key={row.id} row={row} />)
-                    : vendors.map((row) => <Rows key={row.id} row={row} />)}
+                    ? (rowsPerPage > 0
+                        ? vendors?.data.slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage
+                          )
+                        : vendors?.data
+                      ).map((row) => <Rows key={row.id} row={row} />)
+                    : (rowsPerPage > 0
+                        ? vendors.slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage
+                          )
+                        : vendors
+                      ).map((row) => <Rows key={row.id} row={row} />)}
                 </BasicTable>
               </Grid>
             ) : (

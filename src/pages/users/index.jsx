@@ -42,7 +42,8 @@ import { useNavigate } from "react-router-dom";
 
 const Users = () => {
   const { data: users, isLoading: loading } = useGetAllUsersQuery();
-
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(0);
   if (loading) return <Skeletons />;
 
   const headcells = [
@@ -72,11 +73,18 @@ const Users = () => {
                 rows={users}
                 paginationLabel="users per page"
                 hasCheckbox={false}
-                per_page={users?.per_page}
-                totalPage={users?.length}
-                nextPageUrl={users?.next_page_url}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                setRowsPerPage={setRowsPerPage}
+                setPage={setPage}
               >
-                {users?.map((row) => (
+                {(rowsPerPage > 0
+                  ? users.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : users
+                ).map((row) => (
                   <Rows key={row.id} row={row} />
                 ))}
               </BasicTable>

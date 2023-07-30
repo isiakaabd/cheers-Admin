@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import EmptyCell from "components/EmptyTable";
 import BasicTable from "components/Table";
+import { useState } from "react";
 import { useGetLocalOrdersQuery } from "redux/api/admin";
 
 const LocalOrders = () => {
@@ -24,6 +25,8 @@ const LocalOrders = () => {
     "Status",
     "Settlement",
   ];
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(0);
   if (isLoading) return <Skeletons />;
 
   return (
@@ -72,13 +75,20 @@ const LocalOrders = () => {
               tableHead={headcells}
               rows={orders}
               paginationLabel="Orders per page"
-              hasCheckbox
-              per_page={orders?.per_page}
-              totalPage={orders?.to}
-              nextPageUrl={orders?.next_page_url}
+              hasCheckbox={false}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              setRowsPerPage={setRowsPerPage}
+              setPage={setPage}
             >
-              {orders?.map((row) => (
-                <Rows key={row.id} row={row} hasCheckbox={true} />
+              {(rowsPerPage > 0
+                ? orders.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : orders
+              ).map((row) => (
+                <Rows key={row.id} row={row} hasCheckbox={false} />
               ))}
             </BasicTable>
           </Grid>
@@ -93,7 +103,7 @@ const LocalOrders = () => {
   );
 };
 
-function Rows({ row, hasCheckbox }) {
+function Rows({ row }) {
   const { status, vendor, order_id, price, vendor_name, user, settlement } =
     row;
   const overflow = {
@@ -104,20 +114,6 @@ function Rows({ row, hasCheckbox }) {
   };
   return (
     <TableRow tabIndex={-1} sx={{ cursor: "pointer" }}>
-      {hasCheckbox && (
-        <TableCell padding="checkbox">
-          <Checkbox
-            size="large"
-            color="primary"
-            onClick={(event) => {
-              event.stopPropagation();
-              //   handleClicks(event, id);
-            }}
-            // checked={isItemSelected}
-          />
-        </TableCell>
-      )}
-
       <TableCell scope="row" align="left">
         <Grid item container alignItems="center" gap={1} flexWrap="nowrap">
           <Typography

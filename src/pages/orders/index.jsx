@@ -37,6 +37,8 @@ const Orders = () => {
     "Status",
     "",
   ];
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(0);
   if (isLoading) return <Skeletons />;
 
   const onSubmit = () => {};
@@ -87,11 +89,18 @@ const Orders = () => {
               rows={orders}
               paginationLabel="vendors per page"
               hasCheckbox={false}
-              per_page={orders?.per_page}
-              totalPage={orders?.to}
-              nextPageUrl={orders?.next_page_url}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              setRowsPerPage={setRowsPerPage}
+              setPage={setPage}
             >
-              {orders?.map((row) => (
+              {(rowsPerPage > 0
+                ? orders.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : orders
+              ).map((row) => (
                 <Rows key={row.id} row={row} />
               ))}
             </BasicTable>

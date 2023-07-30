@@ -257,9 +257,13 @@ export default function MiniDrawer() {
   };
   const [id, setId] = useState(0);
   const location = useLocation();
+  const splittedLocation = location.pathname.split("/");
+
   useLayoutEffect(() => {
     sidebarItem.map((page) =>
-      page.link === location.pathname ? setId(page.id) : null
+      page.link === location.pathname || `/${splittedLocation[1]}` === page.link
+        ? setId(page.id)
+        : null
     );
 
     //eslint-disable-next-line

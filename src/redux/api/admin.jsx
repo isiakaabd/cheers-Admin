@@ -175,11 +175,9 @@ export const adminSlice = api.injectEndpoints({
       }),
       invalidatesTags: ["categories"],
     }),
-    getSupportResponses: builder.mutation({
+    getSupportResponses: builder.query({
       query: (body) => ({
-        url: `/support/get-all-supports-replies`,
-        method: "POST",
-        body,
+        url: `/support/get-all-supports-replies/${body}`,
       }),
       providesTags: ["support"],
       transformResponse: (response) => response.data,
@@ -192,6 +190,7 @@ export const adminSlice = api.injectEndpoints({
       }),
       invalidatesTags: ["support"],
       transformResponse: (response) => response.data,
+      transformErrorResponse: (response) => response.data.message,
     }),
     changeSupportTicket: builder.mutation({
       query: (id) => ({
@@ -232,7 +231,7 @@ export const {
   useGetAllSupportsQuery,
   useChangeSupportTicketMutation,
   useReplySupportMutation,
-  useGetSupportResponsesMutation,
+  useGetSupportResponsesQuery,
   useGetAllUserFriendsQuery,
   useResetVendorPasswordMutation,
   useUpdateGlobalVendorMutation,

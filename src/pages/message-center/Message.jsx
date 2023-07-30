@@ -18,7 +18,7 @@ import { Formik, Form } from "formik/dist";
 import { useLocation } from "react-router-dom";
 import {
   useChangeSupportTicketMutation,
-  useGetSupportResponsesMutation,
+  useGetSupportResponsesQuery,
   useReplySupportMutation,
 } from "redux/api/admin";
 import FormikControl from "validation/FormikControl";
@@ -62,26 +62,16 @@ const Message = () => {
   const handleClose = () => setAnchorEl(null);
   const handleCloses = () => setAnchorEls(null);
   const { id } = useParams();
-  const [state, setState] = useState([]);
-  const [getResponse, { data, isLoading: loading }] =
-    useGetSupportResponsesMutation();
-  const [status, setStatus] = useState(data?.is_open);
+  // const [state, setState] = useState([]);
+  const { data, isLoading: loading } = useGetSupportResponsesQuery(id);
+
+  const [status, setStatus] = useState(Boolean(data?.is_open));
   const [replySupport, { isLoading }] = useReplySupportMutation();
   const [changeTicket] = useChangeSupportTicketMutation();
   useEffect(() => {
-    setStatus(data?.is_open);
+    setStatus(Boolean(data?.is_open));
   }, [data?.is_open]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data } = await getResponse({ support_id: id });
-
-      if (data) {
-        setState(data.replies);
-      }
-    };
-    fetchData();
-    //eslint-disable-next-line
-  }, [id]);
+  console.log(data);
   const onSubmit = async (values, { resetForm }) => {
     const formData = new FormData();
     const { message, file } = values;
@@ -92,19 +82,11 @@ const Message = () => {
       formData.append(`image`, file.file[0]);
     }
     const { data, error } = await replySupport(formData);
+    if (error) toast.error(error);
     if (data) {
-      setState([
-        ...state,
-        {
-          message,
-          sender: "admin",
-          createdAt: new Date(),
-        },
-      ]);
-      setTimeout(() => resetForm(), 300);
+      toast.success("sent!!");
+      setTimeout(() => resetForm(), 2000);
     }
-    if (error) toast.error(error.message);
-    console.log(data);
   };
   const validationSchema = Yup.object().shape({
     message: Yup.string()
@@ -181,7 +163,7 @@ const Message = () => {
             <Loader color={"#333"} />
           ) : (
             <List dense alignItems="flex-start">
-              {state?.map((reply) => (
+              {data?.replies?.map((reply) => (
                 <>
                   <ListItem
                     alignItems="flex-start"
