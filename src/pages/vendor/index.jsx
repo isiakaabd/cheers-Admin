@@ -40,7 +40,6 @@ import {
 } from "redux/api/admin";
 import { getDate } from "utilis";
 import FormikControl from "validation/FormikControl";
-import { StaticDateTimePicker } from "@mui/x-date-pickers";
 
 const Vendors = () => {
   const [state, setState] = useState([]);
