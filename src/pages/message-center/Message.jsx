@@ -62,16 +62,15 @@ const Message = () => {
   const handleClose = () => setAnchorEl(null);
   const handleCloses = () => setAnchorEls(null);
   const { id } = useParams();
-  // const [state, setState] = useState([]);
   const { data, isLoading: loading } = useGetSupportResponsesQuery(id);
 
-  const [status, setStatus] = useState(Boolean(data?.is_open));
+  const [status, setStatus] = useState(Boolean(data?.support?.is_open));
   const [replySupport, { isLoading }] = useReplySupportMutation();
   const [changeTicket] = useChangeSupportTicketMutation();
   useEffect(() => {
-    setStatus(Boolean(data?.is_open));
-  }, [data?.is_open]);
-  console.log(data);
+    setStatus(Boolean(data?.support?.is_open));
+  }, [data?.support?.is_open]);
+
   const onSubmit = async (values, { resetForm }) => {
     const formData = new FormData();
     const { message, file } = values;
@@ -107,8 +106,43 @@ const Message = () => {
   };
   return (
     <>
+      <Grid item container mt={{ xs: 6, md: 4 }} gap={{ md: 3, xs: 4 }}>
+        <Grid
+          item
+          md={6}
+          xs={10}
+          mb={{ md: 3, xs: 4 }}
+          mx="auto"
+          flexDirection={"column"}
+        >
+          <Card>
+            <CardHeader
+              title={
+                <Grid item container flexWrap={{ md: "nowrap" }} gap={2}>
+                  <Grid item container flexWrap="nowrap">
+                    <Typography variant="h5" flex={1}>
+                      Vendor Response{" "}
+                    </Typography>
+                    <Typography variant="h5" fontWeight={700}>
+                      {data?.vendor_response || 0}
+                    </Typography>
+                  </Grid>
+                  <Grid item container flexWrap="nowrap">
+                    <Typography variant="h5" flex={1}>
+                      Admin Response{" "}
+                    </Typography>
+                    <Typography variant="h5" fontWeight={700}>
+                      {data?.admin_response || 0}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              }
+            />
+          </Card>
+        </Grid>
+      </Grid>
       <Grid item container mt={{ xs: 0, md: 4 }}>
-        <Grid item md={9} mx="auto" flexDirection={"column"}>
+        <Grid item md={9} xs={11} mx="auto" flexDirection={"column"}>
           <Card>
             <CardHeader
               title={payload?.title}
@@ -151,19 +185,25 @@ const Message = () => {
                   </Formik>
                 </ListItem>
               </MenuItem>
-              <MenuItem onClick={() => handleButtonClick(data?.media)}>
-                <ListItem>
-                  <ListItemText primary="View Images" />
-                </ListItem>
-              </MenuItem>
+              {data?.support?.media > 0 && (
+                <MenuItem
+                  onClick={() => handleButtonClick(data?.support?.media)}
+                >
+                  <ListItem>
+                    <ListItemText primary="View Images" />
+                  </ListItem>
+                </MenuItem>
+              )}
             </BasicMenu>
           </Card>
 
           {loading ? (
-            <Loader color={"#333"} />
+            <Grid item mt={2}>
+              <Loader color={"#333"} />
+            </Grid>
           ) : (
             <List dense alignItems="flex-start">
-              {data?.replies?.map((reply) => (
+              {data?.support?.replies?.map((reply) => (
                 <>
                   <ListItem
                     alignItems="flex-start"
@@ -211,11 +251,17 @@ const Message = () => {
                     handleClick={handleClicks}
                     handleClose={handleCloses}
                   >
-                    <MenuItem onClick={() => handleButtonClick(reply?.media)}>
-                      <ListItem>
-                        <ListItemText primary="View Images" />
-                      </ListItem>
+                    {/* {reply.media.length > 0 && ( */}
+                    <MenuItem
+                      disabled={reply.media.length === 0}
+                      onClick={() => handleButtonClick(reply?.media)}
+                    >
+                      View Images
                     </MenuItem>
+                    {/* )} */}
+                    {/* <MenuItem onClick={() => toast.success("Feature coming")}>
+                      Delete Message
+                    </MenuItem> */}
                   </BasicMenu>
                 </>
               ))}
@@ -312,11 +358,11 @@ const Message = () => {
                 )}
               </Formik>
             </Grid>
-          ) : (
+          ) : status && !loading ? (
             <Grid item container my={2} justifyContent={"center"}>
               <Typography variant="h3"> Issue has been closed</Typography>
             </Grid>
-          )}
+          ) : null}
         </Grid>
       </Grid>
       {isViewerVisible && (

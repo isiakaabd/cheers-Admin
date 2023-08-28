@@ -45,7 +45,6 @@ import { useDispatch } from "react-redux";
 import { logOut } from "redux/auth/auth.reducers";
 import { toast } from "react-toastify";
 import { useLogoutMutation } from "redux/api/authSlice";
-import NotificationMenu from "components/NotificationMenu";
 
 const drawerWidth = 260;
 
@@ -366,9 +365,6 @@ export default function MiniDrawer() {
             </IconButton>
 
             <HeaderText />
-          </Grid>
-          <Grid item>
-            <NotificationMenu menuList={["list"]} />
           </Grid>
         </Toolbar>
       </AppBar>

@@ -1,11 +1,13 @@
 import { Grid, Card, Typography, Skeleton } from "@mui/material";
 import { useGetDashboardAnalyticsQuery } from "redux/api/admin";
 import { Link } from "react-router-dom";
+import Error from "components/Error";
 const Dashboard = () => {
-  const { data, isLoading } = useGetDashboardAnalyticsQuery();
+  const { data, isLoading, error } = useGetDashboardAnalyticsQuery();
 
   if (isLoading) return <Skeletons />;
-  console.log(data);
+  if (error) return <Error error={error} />;
+
   const {
     allLocalVendors,
     allUsers,

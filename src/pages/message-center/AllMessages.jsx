@@ -20,13 +20,13 @@ import FormikControl from "validation/FormikControl";
 
 const AllMessages = () => {
   const { data: supports, isLoading, isFetching } = useGetAllSupportsQuery();
-  console.table(supports?.[0], "supportrr");
+
   const headcells = [
     "Name",
-    "Store Name",
+    "Vendor Name",
     "Date Created",
-    "No of Messages",
-    "No of Responses",
+    // "No of Messages",
+    // "No of Responses",
     "Status",
   ];
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -111,16 +111,13 @@ const AllMessages = () => {
 function Rows({ row }) {
   const {
     id,
-    vendor_name,
-    first_name,
     is_open,
-    last_name,
-    // is_opn,
+    vendor: { last_name, first_name, vendor_name },
     created_at,
   } = row;
   const navigate = useNavigate();
   const status = Boolean(is_open) ? "Active" : "Closed";
-  console.log(is_open, status);
+
   return (
     <TableRow
       tabIndex={-1}
@@ -133,8 +130,8 @@ function Rows({ row }) {
       </TableCell>
       <TableCell align="left">{vendor_name || "No Store Name"}</TableCell>
       <TableCell align="left">{getDate(created_at)}</TableCell>
-      <TableCell align="left">{getDate(created_at)}</TableCell>
-      <TableCell align="left">{getDate(created_at)}</TableCell>
+      {/* <TableCell align="left">{getDate(created_at)}</TableCell>
+      <TableCell align="left">{getDate(created_at)}</TableCell> */}
       <TableCell align="left">
         <Chip
           label={status}
