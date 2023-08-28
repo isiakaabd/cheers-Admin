@@ -77,7 +77,7 @@ const Message = () => {
 
     formData.append("support_id", id);
     formData.append("message", message);
-    if (file.file.length > 0) {
+    if (file?.file?.length > 0) {
       formData.append(`image`, file.file[0]);
     }
     const { data, error } = await replySupport(formData);
