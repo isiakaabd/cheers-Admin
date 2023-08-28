@@ -276,6 +276,7 @@ const Message = () => {
               >
                 {({ values, errors }) => (
                   <Form noValidate style={{ width: "100%" }}>
+                    {console.log(errors)}
                     <Grid item container>
                       <Typography variant="h4" mb={2} gutterBottom>
                         Reply
