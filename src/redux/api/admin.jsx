@@ -232,6 +232,7 @@ export const {
   useChangeSupportTicketMutation,
   useReplySupportMutation,
   useGetSupportResponsesQuery,
+  useLazyGetSupportResponsesQuery,
   useGetAllUserFriendsQuery,
   useResetVendorPasswordMutation,
   useUpdateGlobalVendorMutation,

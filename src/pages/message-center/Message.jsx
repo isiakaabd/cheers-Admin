@@ -19,6 +19,7 @@ import { useLocation } from "react-router-dom";
 import {
   useChangeSupportTicketMutation,
   useGetSupportResponsesQuery,
+  useLazyGetSupportResponsesQuery,
   useReplySupportMutation,
 } from "redux/api/admin";
 import FormikControl from "validation/FormikControl";
@@ -30,12 +31,14 @@ import Loader from "components/Loader";
 import { getTimeMoment } from "utilis";
 import BasicMenu from "components/MenuComponent";
 import { toast } from "react-toastify";
+import { RefreshOutlined } from "@mui/icons-material";
 
 const Message = () => {
   const location = useLocation();
   const payload = location.state;
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorEls, setAnchorEls] = useState(null);
+  // const [getMessage] = useLazyGetSupportsReplyQuery();
   const [index, setIndex] = useState(0);
   const [images, setImages] = useState([]);
   const open = Boolean(anchorEl);
@@ -62,8 +65,17 @@ const Message = () => {
   const handleClose = () => setAnchorEl(null);
   const handleCloses = () => setAnchorEls(null);
   const { id } = useParams();
-  const { data, isLoading: loading } = useGetSupportResponsesQuery(id);
-
+  const { data, isLoading: loading } = useGetSupportResponsesQuery(id, {
+    pollingInterval: 120000,
+  });
+  const [getMessage, { data: reloadData, isError }] =
+    useLazyGetSupportResponsesQuery(id);
+  useEffect(() => {
+    if (reloadData) {
+      toast.success("Support Response Returned Successfully");
+    }
+    if (isError) toast.error("something went wrong...");
+  }, [reloadData, isError]);
   const [status, setStatus] = useState(Boolean(data?.support?.is_open));
   const [replySupport, { isLoading }] = useReplySupportMutation();
   const [changeTicket] = useChangeSupportTicketMutation();
@@ -138,6 +150,14 @@ const Message = () => {
                 </Grid>
               }
             />
+            <Grid item container justifyContent="center">
+              <IconButton
+                title="Refresh Messages"
+                onClick={() => getMessage(id)}
+              >
+                <RefreshOutlined fontSize="large" />
+              </IconButton>
+            </Grid>
           </Card>
         </Grid>
       </Grid>
@@ -210,7 +230,7 @@ const Message = () => {
                     dense
                     sx={{
                       backgroundColor:
-                        reply.sender === "admin" ? "#d9fdd3" : "#a80a69",
+                        reply.sender === "admin" ? "#ffb9eb99" : "#ffb9eb5c",
                     }}
                     secondaryAction={
                       <IconButton
@@ -236,10 +256,9 @@ const Message = () => {
                             variant="h6"
                             sx={{ textAlign: "right", width: "100%" }}
                           >
-                            {getTimeMoment(reply.created_at)}
+                            {getTimeMoment(reply.created_at)} | {reply?.sender}
                           </Typography>
                         }
-                        // primary={reply.title}
                       />
                     </ListItemButton>
                   </ListItem>
@@ -276,7 +295,6 @@ const Message = () => {
               >
                 {({ values, errors }) => (
                   <Form noValidate style={{ width: "100%" }}>
-                    {console.log(errors)}
                     <Grid item container>
                       <Typography variant="h4" mb={2} gutterBottom>
                         Reply
